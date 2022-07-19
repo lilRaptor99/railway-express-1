@@ -1,3 +1,3 @@
 export function hello() {
-  console.log("Hello from common 13");
+  console.log('Hello from common 13');
 }

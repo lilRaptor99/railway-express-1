@@ -3,9 +3,7 @@
     "name": "passenger-app",
     "slug": "passenger-app",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "assetBundlePatterns": ["**/*"]
   },
   "name": "passenger-app"
 }

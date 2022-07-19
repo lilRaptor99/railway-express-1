@@ -1,3 +1,3 @@
-import { hello } from "@railway-express/common";
+import { hello } from '@railway-express/common';
 
 hello();
