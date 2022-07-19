@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "frontend",
+      "backend",
+      "common"
+    ],
+    "nohoist": [
+      "passenger-app/**"
+    ]
+  }
+}
