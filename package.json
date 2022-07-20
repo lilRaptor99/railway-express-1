@@ -1,22 +1,25 @@
 {
   "private": true,
-  "workspaces": {
-    "packages": [
-      "frontend",
-      "backend",
-      "common"
-    ],
-    "nohoist": [
-      "passenger-app/**"
-    ]
-  },
   "devDependencies": {
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
-    "prettier": "2.7.1"
+    "prettier": "2.7.1",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "jest": "^27.1.0",
+    "jest-mock-extended": "^2.0.4",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
   },
   "scripts": {
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prettier:write": "npx prettier --write .",
+    "prettier:check": "npx prettier --check .",
+    "lint:check-backend": "npx eslint ./backend/src/**/*.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: |
+            frontend/yarn.lock
+            backend/yarn.lock
+            passenger-app/yarn.lock
+      - name: Install yarn
+        run: npm install -g yarn
+      - name: Install global dependencies
+        run: yarn install
+      - name: Install backend dependencies
+        run: |
+          cd ./backend
+          yarn install
+      - name: Install frontend dependencies
+        run: |
+          cd ./frontend
+          yarn install
+      - name: Install passenger-app dependencies
+        run: |
+          cd ./passenger-app
+          yarn install
+      - name: Check prettier
+        run: yarn prettier:check
+      - name: Lint check backend
+        run: yarn lint:check-backend
+        env:
+          CI: true
