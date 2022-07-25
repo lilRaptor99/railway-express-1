@@ -1,3 +1,7 @@
+import { Role } from '@prisma/client';
+import { NextFunction, Request } from 'express';
+import HttpException from '../models/http-exception.model';
+
 const { expressjwt: jwt } = require('express-jwt');
 
 const getTokenFromHeaders = (req: {
@@ -13,6 +17,15 @@ const getTokenFromHeaders = (req: {
   }
   return null;
 };
+
+export function isAuthorized(userType: Role, req: Request, next: NextFunction) {
+  // @ts-ignore
+  if (req.auth.role === userType) {
+    next();
+  } else {
+    throw new HttpException(401, { errors: ['Unauthorized!'] });
+  }
+}
 
 const auth = {
   required: jwt({
