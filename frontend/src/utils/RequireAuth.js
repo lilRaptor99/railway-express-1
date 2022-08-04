@@ -1,12 +1,12 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 
-export default function RequireAuth({ authorizedUserRole, children }) {
+export default function RequireAuth({ authorizedUserRole }) {
   const { currentUser } = useAuth();
 
   if (currentUser?.role === authorizedUserRole) {
-    return children;
+    return <Outlet />;
   }
 
   return <Navigate to="/" replace />;

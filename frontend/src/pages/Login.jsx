@@ -9,21 +9,37 @@ import { Collapse, Alert, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import Logo from '../assets/Logo.svg';
 
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 
 export default function Login() {
   const [loginError, setLoginError] = useState('');
-
-  const { currentUser, login } = useAuth();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   async function handleLoginSubmit(values, { setSubmitting }) {
     setLoginError('');
 
     try {
-      await login(values.email, values.password);
+      const user = await login(values.email, values.password);
+
+      // Redirect the authorized user to the relevant dashboard page
+      switch (user?.role) {
+        case 'ADMIN':
+          navigate('/admin/stats', { replace: true });
+          break;
+        case 'CONTROL_OFFICER':
+          navigate('/control', { replace: true });
+          break;
+        case 'TICKETING_OFFICER':
+          navigate('/ticketing', { replace: true });
+          break;
+        default:
+          navigate('/', { replace: true });
+      }
     } catch (e) {
       if (e?.response?.status === 401) {
-        setLoginError('Incorrect username or password');
+        setLoginError('Incorrect Email or Password');
       } else {
         setLoginError('Error logging in');
         console.error('Login Error: ', e);
@@ -45,7 +61,7 @@ export default function Login() {
 
         <div className="text-center mb-4">
           <h1 className="text-slate-800 text-2xl font-bold mb-1">
-            Hi, Welcome Back - {currentUser?.firstName}
+            Hi, Welcome Back
           </h1>
           <p className="text-slate-500 m-0">
             Enter your credentials to continue
