@@ -1,13 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '../components/Button';
 import TextField from '../components/TextField';
-
 import { Collapse, Alert, IconButton } from '@mui/material';
-
 import { Close } from '@mui/icons-material';
 import Logo from '../assets/Logo.svg';
 
@@ -23,7 +21,6 @@ export default function Login() {
 
     try {
       await login(values.email, values.password);
-      alert('logged in');
     } catch (e) {
       if (e?.response?.status === 401) {
         setLoginError('Incorrect username or password');
@@ -107,6 +104,7 @@ export default function Login() {
                     {...formik.getFieldProps('email')}
                     error={Boolean(formik.touched.email && formik.errors.email)}
                     helperText={formik.errors.email}
+                    passwordField={false}
                   />
                   <TextField
                     fullWidth
