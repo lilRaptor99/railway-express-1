@@ -9,7 +9,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-export default function TextField(props) {
+export default function TextField({ passwordField, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
 
   function handleClickShowPassword() {
@@ -19,7 +19,7 @@ export default function TextField(props) {
     event.preventDefault();
   }
 
-  if (props?.passwordField) {
+  if (passwordField) {
     return (
       <MuiTextField
         InputProps={{

@@ -2,9 +2,9 @@ import { Button as MuiButton } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function Button(props) {
+export default function Button({ isLoading, ...props }) {
   // Loading button
-  if (props.isLoading) {
+  if (isLoading) {
     return (
       <MuiButton
         endIcon={<CircularProgress size={22} className="text-slate-800 ml-1" />}
@@ -17,6 +17,9 @@ export default function Button(props) {
   }
 
   // Normal button
+  // if (props.isLoading !== undefined) {
+  //   delete props.isLoading;
+  // }
   return (
     <MuiButton
       variant="contained"

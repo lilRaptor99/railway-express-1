@@ -22,6 +22,9 @@ export async function login(
     where: { email },
   })) as User;
 
+  if (!matchedUser) {
+    throw new HttpException(401, { errors: ['Incorrect email or password'] });
+  }
   if (!(await bcrypt.compare(password, matchedUser.password))) {
     throw new HttpException(401, { errors: ['Incorrect email or password'] });
   }

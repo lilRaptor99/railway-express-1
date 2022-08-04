@@ -11,10 +11,30 @@ import { Collapse, Alert, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import Logo from '../assets/Logo.svg';
 
+import { useAuth } from '../contexts/authContext';
+
 export default function Login() {
   const [loginError, setLoginError] = useState('');
 
-  function handleLoginSubmit() {}
+  const { currentUser, login } = useAuth();
+
+  async function handleLoginSubmit(values, { setSubmitting }) {
+    setLoginError('');
+
+    try {
+      await login(values.email, values.password);
+      alert('logged in');
+    } catch (e) {
+      if (e?.response?.status === 401) {
+        setLoginError('Incorrect username or password');
+      } else {
+        setLoginError('Error logging in');
+        console.error('Login Error: ', e);
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className="min-h-screen w-full bg-slate-700 flex justify-center items-center">
@@ -28,7 +48,7 @@ export default function Login() {
 
         <div className="text-center mb-4">
           <h1 className="text-slate-800 text-2xl font-bold mb-1">
-            Hi, Welcome Back
+            Hi, Welcome Back - {currentUser?.firstName}
           </h1>
           <p className="text-slate-500 m-0">
             Enter your credentials to continue
