@@ -9,6 +9,10 @@ import { Route, Routes } from 'react-router-dom';
 import RequireAuth from './utils/RequireAuth';
 import ManageUsers from 'pages/admin/ManageUsers';
 import Statistics from 'pages/admin/Statistics';
+import TrainLocation from 'pages/controlOfficer/TrainLocation';
+import AddTurn from 'pages/controlOfficer/AddTurn';
+import NormalTickets from 'pages/ticketingOfficer/NormalTickets';
+import SeasonTickets from 'pages/ticketingOfficer/SeasonTickets';
 
 function App() {
   return (
@@ -30,19 +34,15 @@ function App() {
                 path="/control"
                 element={<RequireAuth authorizedUserRole="CONTROL_OFFICER" />}
               >
-                <Route
-                  path="index"
-                  element={<h1>Control Officer dashboard page</h1>}
-                />
+                <Route path="train-location" element={<TrainLocation />} />
+                <Route path="add-turn" element={<AddTurn />} />
               </Route>
               <Route
                 path="/ticketing"
                 element={<RequireAuth authorizedUserRole="TICKETING_OFFICER" />}
               >
-                <Route
-                  path="index"
-                  element={<h1>Ticketing Officer dashboard page</h1>}
-                />
+                <Route path="normal" element={<NormalTickets />} />
+                <Route path="season" element={<SeasonTickets />} />
               </Route>
             </Routes>
           </AuthProvider>

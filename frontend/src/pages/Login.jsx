@@ -24,10 +24,10 @@ export default function Login() {
         navigate('/admin/stats', { replace: true });
         break;
       case 'CONTROL_OFFICER':
-        navigate('/control', { replace: true });
+        navigate('/control/train-location', { replace: true });
         break;
       case 'TICKETING_OFFICER':
-        navigate('/ticketing', { replace: true });
+        navigate('/ticketing/normal', { replace: true });
         break;
       default:
         return;
