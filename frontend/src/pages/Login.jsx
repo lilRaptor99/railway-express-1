@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -15,28 +15,30 @@ import { useAuth } from '../contexts/authContext';
 export default function Login() {
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { currentUser, login } = useAuth();
+
+  // Navigate logged in user
+  useEffect(() => {
+    switch (currentUser?.role) {
+      case 'ADMIN':
+        navigate('/admin/stats', { replace: true });
+        break;
+      case 'CONTROL_OFFICER':
+        navigate('/control', { replace: true });
+        break;
+      case 'TICKETING_OFFICER':
+        navigate('/ticketing', { replace: true });
+        break;
+      default:
+        return;
+    }
+  }, [currentUser, navigate]);
 
   async function handleLoginSubmit(values, { setSubmitting }) {
     setLoginError('');
 
     try {
-      const user = await login(values.email, values.password);
-
-      // Redirect the authorized user to the relevant dashboard page
-      switch (user?.role) {
-        case 'ADMIN':
-          navigate('/admin/stats', { replace: true });
-          break;
-        case 'CONTROL_OFFICER':
-          navigate('/control', { replace: true });
-          break;
-        case 'TICKETING_OFFICER':
-          navigate('/ticketing', { replace: true });
-          break;
-        default:
-          navigate('/', { replace: true });
-      }
+      await login(values.email, values.password);
     } catch (e) {
       if (e?.response?.status === 401) {
         setLoginError('Incorrect Email or Password');

@@ -1,10 +1,10 @@
-import DashboardLayout from '../../layout/DashboardLayout';
 import React from 'react';
+import AdminLayout from '../../layout/AdminLayout';
 
 export default function Statistics() {
   return (
-    <DashboardLayout>
+    <AdminLayout>
       <h1 className="">Statistics</h1>
-    </DashboardLayout>
+    </AdminLayout>
   );
 }

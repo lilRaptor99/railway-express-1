@@ -1,10 +1,10 @@
 import React from 'react';
-import DashboardLayout from 'layout/DashboardLayout';
+import AdminLayout from '../../layout/AdminLayout';
 
 export default function ManageUsers() {
   return (
-    <DashboardLayout>
+    <AdminLayout>
       <h1 className="">ManageUsers</h1>
-    </DashboardLayout>
+    </AdminLayout>
   );
 }
