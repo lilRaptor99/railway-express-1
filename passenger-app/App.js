@@ -2,12 +2,21 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Appbar, Button, Provider as PaperProvider } from 'react-native-paper';
+import {
+  Appbar,
+  Avatar,
+  Button,
+  IconButton,
+  Provider as PaperProvider,
+  TextInput,
+} from 'react-native-paper';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import {
   createDrawerNavigator,
   useDrawerStatus,
 } from '@react-navigation/drawer';
+import CustomDrawer from './src/components/CustomDrawer';
+import { theme } from './reactNativePaperTheme';
 
 function HomeScreen({ navigation }) {
   return (
@@ -32,6 +41,13 @@ function DetailsScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Details Screen</Text>
+      <TextInput mode="outlined" label="Email" textContentType="emailAddress" />
+      <TextInput
+        mode="outlined"
+        label="Password"
+        textContentType="password"
+        secureTextEntry
+      />
     </View>
   );
 }
@@ -100,21 +116,33 @@ function DetailsNavigators() {
 }
 export default function App() {
   return (
-    <NavigationContainer>
-      <PaperProvider>
+    <PaperProvider theme={theme}>
+      <NavigationContainer theme={theme}>
         <Drawer.Navigator
           initialRouteName="Home"
           screenOptions={{
             header: () => undefined,
           }}
+          drawerContent={CustomDrawer}
         >
-          <Drawer.Screen name="HomeNavigators" component={HomeNavigators} />
           <Drawer.Screen
-            name="DetailsNavigators"
+            name="Search"
+            component={HomeNavigators}
+            options={{
+              drawerIcon: () => <IconButton size={30} icon="magnify" />,
+              drawerLabelStyle: { fontSize: 16 },
+            }}
+          />
+          <Drawer.Screen
+            name="My Tickets"
             component={DetailsNavigators}
+            options={{
+              drawerIcon: () => <IconButton size={30} icon="barcode" />,
+              drawerLabelStyle: { fontSize: 16 },
+            }}
           />
         </Drawer.Navigator>
-      </PaperProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
