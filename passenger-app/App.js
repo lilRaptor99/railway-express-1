@@ -1,148 +1,125 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
+import { theme } from './reactNativePaperTheme';
+import { TailwindProvider } from 'tailwindcss-react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {
-  Appbar,
-  Avatar,
-  Button,
-  IconButton,
-  Provider as PaperProvider,
-  TextInput,
-} from 'react-native-paper';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import {
-  createDrawerNavigator,
-  useDrawerStatus,
-} from '@react-navigation/drawer';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { IconButton, Provider as PaperProvider } from 'react-native-paper';
+
 import CustomDrawer from './src/components/CustomDrawer';
-import { theme } from './reactNativePaperTheme';
+import CustomNavigationBar from './src/components/CustomNavigationBar';
 
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button mode="contained" onPress={() => navigation.navigate('Home-2')}>
-        Go to home screen 2
-      </Button>
-    </View>
-  );
-}
-
-function HomeScreen2() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen2</Text>
-    </View>
-  );
-}
-
-function DetailsScreen() {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Details Screen</Text>
-      <TextInput mode="outlined" label="Email" textContentType="emailAddress" />
-      <TextInput
-        mode="outlined"
-        label="Password"
-        textContentType="password"
-        secureTextEntry
-      />
-    </View>
-  );
-}
-function CustomNavigationBar({ navigation, back, options, route }) {
-  const drawerStatus = useDrawerStatus();
-  return (
-    <Appbar.Header>
-      {back ? <Appbar.BackAction onPress={navigation.goBack} /> : null}
-      {!back ? (
-        <Appbar.Action
-          icon="menu"
-          color="white"
-          onPress={() => {
-            console.log('opening drawer...');
-            navigation.openDrawer();
-            console.log('Drawer status:', drawerStatus);
-          }}
-        />
-      ) : null}
-      <Appbar.Content title={route.params?.screenTitle} />
-    </Appbar.Header>
-  );
-}
+import SearchTrains from './src/screens/search/SearchTrains';
+import SearchResults from './src/screens/search/SearchResults';
+import SearchTimeTable from './src/screens/timeTables/SearchTimeTable';
+import StationSchedule from './src/screens/timeTables/StationSchedule';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function HomeNavigators() {
+function SearchNavigators() {
   return (
     <Stack.Navigator
-      initialRouteName="Home"
+      initialRouteName="SearchTrains"
       screenOptions={{
-        // @ts-ignore
         header: (props) => <CustomNavigationBar {...props} />,
       }}
     >
       <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        initialParams={{ screenTitle: 'My awesome Home' }}
+        name="SearchTrains"
+        component={SearchTrains}
+        initialParams={{ screenTitle: 'Search Trains' }}
       />
       <Stack.Screen
-        name="Home-2"
-        component={HomeScreen2}
-        initialParams={{ screenTitle: 'My Home 2' }}
+        name="SearchResults"
+        component={SearchResults}
+        initialParams={{ screenTitle: 'Available Trains' }}
       />
     </Stack.Navigator>
   );
 }
-function DetailsNavigators() {
+function TimeTableNavigators() {
   return (
     <Stack.Navigator
-      initialRouteName="Details"
+      initialRouteName="SearchTimeTable"
       screenOptions={{
-        // @ts-ignore
         header: (props) => <CustomNavigationBar {...props} />,
       }}
     >
       <Stack.Screen
-        name="Details"
-        component={DetailsScreen}
-        initialParams={{ screenTitle: 'My Details page' }}
+        name="SearchTimeTable"
+        component={SearchTimeTable}
+        initialParams={{ screenTitle: 'Search Time Table' }}
+      />
+      <Stack.Screen
+        name="StationSchedule"
+        component={StationSchedule}
+        initialParams={{ screenTitle: 'Station Schedule' }}
       />
     </Stack.Navigator>
   );
 }
+function MyTicketsNavigators() {
+  return (
+    <Stack.Navigator
+      initialRouteName="MyTickets"
+      screenOptions={{
+        header: (props) => <CustomNavigationBar {...props} />,
+      }}
+    >
+      <Stack.Screen
+        name="MyTickets"
+        component={SearchTimeTable}
+        initialParams={{ screenTitle: 'My Tickets' }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
+  const drawerScreenOptions = ({ icon }) => {
+    return {
+      drawerIcon: ({ color }) => (
+        <IconButton size={30} icon={icon} color={color} />
+      ),
+      drawerLabelStyle: { fontSize: 17 },
+      drawerInactiveTintColor: '#94a3b8',
+      drawerInactiveBackgroundColor: '#3d4252',
+      drawerActiveTintColor: 'white',
+      drawerActiveBackgroundColor: 'rgba(0, 0, 0, 0.06)',
+    };
+  };
+
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme}>
-        <Drawer.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            header: () => undefined,
-          }}
-          drawerContent={CustomDrawer}
-        >
-          <Drawer.Screen
-            name="Search"
-            component={HomeNavigators}
-            options={{
-              drawerIcon: () => <IconButton size={30} icon="magnify" />,
-              drawerLabelStyle: { fontSize: 16 },
+    <TailwindProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer theme={theme}>
+          <Drawer.Navigator
+            initialRouteName="Search Trains"
+            screenOptions={{
+              header: () => undefined,
             }}
-          />
-          <Drawer.Screen
-            name="My Tickets"
-            component={DetailsNavigators}
-            options={{
-              drawerIcon: () => <IconButton size={30} icon="barcode" />,
-              drawerLabelStyle: { fontSize: 16 },
-            }}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+            drawerContent={CustomDrawer}
+          >
+            <Drawer.Screen
+              name="Search Trains"
+              component={SearchNavigators}
+              options={drawerScreenOptions({ icon: 'magnify' })}
+            />
+            <Drawer.Screen
+              name="My Tickets"
+              component={MyTicketsNavigators}
+              options={drawerScreenOptions({ icon: 'barcode' })}
+            />
+            <Drawer.Screen
+              name="Time Tables"
+              component={TimeTableNavigators}
+              options={drawerScreenOptions({ icon: 'table-large' })}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </TailwindProvider>
   );
 }
