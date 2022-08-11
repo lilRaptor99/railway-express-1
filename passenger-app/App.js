@@ -14,6 +14,9 @@ import SearchTrains from './src/screens/search/SearchTrains';
 import SearchResults from './src/screens/search/SearchResults';
 import SearchTimeTable from './src/screens/timeTables/SearchTimeTable';
 import StationSchedule from './src/screens/timeTables/StationSchedule';
+import Login from './src/screens/auth/Login';
+import Register from './src/screens/auth/Register';
+import ForgotPassword from './src/screens/auth/ForgotPassword';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -76,6 +79,32 @@ function MyTicketsNavigators() {
     </Stack.Navigator>
   );
 }
+function AuthNavigators() {
+  return (
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        header: (props) => <CustomNavigationBar {...props} />,
+      }}
+    >
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        initialParams={{ screenTitle: 'Login - Railway Express' }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        initialParams={{ screenTitle: 'Register - Railway Express' }}
+      />
+      <Stack.Screen
+        name="ForgotPassword"
+        component={ForgotPassword}
+        initialParams={{ screenTitle: 'Reset Password - Railway Express' }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 export default function App() {
   const drawerScreenOptions = ({ icon }) => {
@@ -116,6 +145,16 @@ export default function App() {
               name="Time Tables"
               component={TimeTableNavigators}
               options={drawerScreenOptions({ icon: 'table-large' })}
+            />
+
+            <Drawer.Screen
+              name="AuthNavigators"
+              xc
+              component={AuthNavigators}
+              options={{
+                drawerItemStyle: { display: 'none' },
+                ...drawerScreenOptions({ icon: 'login' }),
+              }}
             />
           </Drawer.Navigator>
         </NavigationContainer>

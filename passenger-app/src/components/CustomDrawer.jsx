@@ -7,6 +7,7 @@ import {
 import { Linking, View, Text, Image, ScrollView } from 'react-native';
 // @ts-ignore
 import DrawerLogo from '../../assets/images/DrawerLogo.png';
+import { Button } from 'react-native-paper';
 
 export default function CustomDrawer(props) {
   return (
@@ -23,9 +24,27 @@ export default function CustomDrawer(props) {
         </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-      <View className="bg-slate-900 h-12 rounded-3xl mb-11 mx-8">
-        <Text className="text-slate-200 text-lg">Hellooo</Text>
-      </View>
+
+      <Button
+        mode="contained"
+        onPress={() => {
+          console.log('clicked');
+          props.navigation.navigate('AuthNavigators');
+        }}
+        className="bg-slate-900 mb-5 mx-10 p-1 rounded-2xl"
+      >
+        Login
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={() => {
+          console.log('clicked');
+          props.navigation.navigate('Register');
+        }}
+        className="mb-11 mx-10 p-1 rounded-2xl"
+      >
+        <Text className="text-slate-200">Register</Text>
+      </Button>
     </View>
   );
 }
