@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DrawerContentScrollView,
   DrawerItemList,
@@ -12,7 +12,14 @@ import { useAuth } from '../contexts/authContext';
 
 export default function CustomDrawer(props) {
   const { currentUser, logout } = useAuth();
-  // const user = await currentUser();
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      setUser(await currentUser);
+    })();
+  }, [currentUser]);
 
   return (
     <View className="bg-slate-700 min-h-full">
@@ -30,7 +37,7 @@ export default function CustomDrawer(props) {
       </DrawerContentScrollView>
 
       {(() => {
-        if (true) {
+        if (!user) {
           return (
             <>
               <Button
@@ -59,7 +66,7 @@ export default function CustomDrawer(props) {
               mode="contained"
               onPress={() => {
                 logout();
-                props.navigation.navigate('AuthNavigators');
+                props.navigation.navigate('Search Trains');
               }}
               className="bg-slate-900 mb-11 mx-10 p-1 rounded-2xl"
             >

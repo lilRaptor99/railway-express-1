@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import TextInput from '../../components/TextInput';
@@ -33,13 +33,15 @@ export default function Login({ navigation }) {
 
   async function handleLoginSubmit(values, { setSubmitting }) {
     setLoginError(null);
+    setLoginSuccess(false);
 
     try {
       await login(values.email, values.password);
       setLoginSuccess(true);
       setTimeout(() => {
+        setLoginSuccess(false);
         navigation.navigate('Search Trains');
-      }, 3000);
+      }, 2000);
     } catch (e) {
       if (e?.response?.status === 401) {
         setLoginError('Incorrect Email or Password');
