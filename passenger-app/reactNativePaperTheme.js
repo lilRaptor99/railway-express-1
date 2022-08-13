@@ -13,5 +13,6 @@ export const theme = {
     primary: '#3D4252',
     secondary: '#1B1F2F',
     tertiary: '#F6EDED',
+    success: '#28a745',
   },
 };

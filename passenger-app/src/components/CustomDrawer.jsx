@@ -8,8 +8,12 @@ import { Linking, View, Text, Image, ScrollView } from 'react-native';
 // @ts-ignore
 import DrawerLogo from '../../assets/images/DrawerLogo.png';
 import { Button } from 'react-native-paper';
+import { useAuth } from '../contexts/authContext';
 
 export default function CustomDrawer(props) {
+  const { currentUser, logout } = useAuth();
+  // const user = await currentUser();
+
   return (
     <View className="bg-slate-700 min-h-full">
       <DrawerContentScrollView
@@ -25,26 +29,45 @@ export default function CustomDrawer(props) {
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
 
-      <Button
-        mode="contained"
-        onPress={() => {
-          console.log('clicked');
-          props.navigation.navigate('AuthNavigators');
-        }}
-        className="bg-slate-900 mb-5 mx-10 p-1 rounded-2xl"
-      >
-        Login
-      </Button>
-      <Button
-        mode="outlined"
-        onPress={() => {
-          console.log('clicked');
-          props.navigation.navigate('Register');
-        }}
-        className="mb-11 mx-10 p-1 rounded-2xl"
-      >
-        <Text className="text-slate-200">Register</Text>
-      </Button>
+      {(() => {
+        if (true) {
+          return (
+            <>
+              <Button
+                mode="contained"
+                onPress={() => {
+                  props.navigation.navigate('AuthNavigators');
+                }}
+                className="bg-slate-900 mb-5 mx-10 p-1 rounded-2xl"
+              >
+                Login
+              </Button>
+              <Button
+                mode="outlined"
+                onPress={() => {
+                  props.navigation.navigate('Register');
+                }}
+                className="mb-11 mx-10 p-1 rounded-2xl"
+              >
+                <Text className="text-slate-200">Register</Text>
+              </Button>
+            </>
+          );
+        } else {
+          return (
+            <Button
+              mode="contained"
+              onPress={() => {
+                logout();
+                props.navigation.navigate('AuthNavigators');
+              }}
+              className="bg-slate-900 mb-11 mx-10 p-1 rounded-2xl"
+            >
+              Logout
+            </Button>
+          );
+        }
+      })()}
     </View>
   );
 }

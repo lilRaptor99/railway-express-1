@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { IconButton, Provider as PaperProvider } from 'react-native-paper';
+import { AuthProvider } from './src/contexts/authContext';
 
 import CustomDrawer from './src/components/CustomDrawer';
 import CustomNavigationBar from './src/components/CustomNavigationBar';
@@ -121,44 +122,45 @@ export default function App() {
   };
 
   return (
-    <TailwindProvider>
-      <PaperProvider theme={theme}>
-        <NavigationContainer theme={theme}>
-          <Drawer.Navigator
-            initialRouteName="Search Trains"
-            screenOptions={{
-              header: () => undefined,
-            }}
-            drawerContent={CustomDrawer}
-          >
-            <Drawer.Screen
-              name="Search Trains"
-              component={SearchNavigators}
-              options={drawerScreenOptions({ icon: 'magnify' })}
-            />
-            <Drawer.Screen
-              name="My Tickets"
-              component={MyTicketsNavigators}
-              options={drawerScreenOptions({ icon: 'barcode' })}
-            />
-            <Drawer.Screen
-              name="Time Tables"
-              component={TimeTableNavigators}
-              options={drawerScreenOptions({ icon: 'table-large' })}
-            />
-
-            <Drawer.Screen
-              name="AuthNavigators"
-              xc
-              component={AuthNavigators}
-              options={{
-                drawerItemStyle: { display: 'none' },
-                ...drawerScreenOptions({ icon: 'login' }),
+    <AuthProvider>
+      <TailwindProvider>
+        <PaperProvider theme={theme}>
+          <NavigationContainer theme={theme}>
+            <Drawer.Navigator
+              initialRouteName="Search Trains"
+              screenOptions={{
+                header: () => undefined,
               }}
-            />
-          </Drawer.Navigator>
-        </NavigationContainer>
-      </PaperProvider>
-    </TailwindProvider>
+              drawerContent={CustomDrawer}
+            >
+              <Drawer.Screen
+                name="Search Trains"
+                component={SearchNavigators}
+                options={drawerScreenOptions({ icon: 'magnify' })}
+              />
+              <Drawer.Screen
+                name="My Tickets"
+                component={MyTicketsNavigators}
+                options={drawerScreenOptions({ icon: 'barcode' })}
+              />
+              <Drawer.Screen
+                name="Time Tables"
+                component={TimeTableNavigators}
+                options={drawerScreenOptions({ icon: 'table-large' })}
+              />
+
+              <Drawer.Screen
+                name="AuthNavigators"
+                component={AuthNavigators}
+                options={{
+                  drawerItemStyle: { display: 'none' },
+                  ...drawerScreenOptions({ icon: 'login' }),
+                }}
+              />
+            </Drawer.Navigator>
+          </NavigationContainer>
+        </PaperProvider>
+      </TailwindProvider>
+    </AuthProvider>
   );
 }
