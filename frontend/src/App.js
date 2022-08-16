@@ -13,6 +13,8 @@ import TrainLocation from 'pages/controlOfficer/TrainLocation';
 import AddTurn from 'pages/controlOfficer/AddTurn';
 import NormalTickets from 'pages/ticketingOfficer/NormalTickets';
 import SeasonTickets from 'pages/ticketingOfficer/SeasonTickets';
+import AddAccounts from 'pages/admin/AddAccounts';
+import Tickets from 'pages/admin/Tickets';
 
 function App() {
   return (
@@ -27,8 +29,10 @@ function App() {
                 path="/admin"
                 element={<RequireAuth authorizedUserRole="ADMIN" />}
               >
-                <Route path="manage-users" element={<ManageUsers />} />
                 <Route path="stats" element={<Statistics />} />
+                <Route path="tickets" element={<Tickets />} />
+                <Route path="add-account" element={<AddAccounts />} />
+                <Route path="manage-users" element={<ManageUsers />} />
               </Route>
               <Route
                 path="/control"

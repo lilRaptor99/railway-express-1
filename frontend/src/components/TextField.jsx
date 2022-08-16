@@ -8,8 +8,9 @@ import {
 
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import React from 'react';
 
-export default function TextField({ passwordField, ...props }) {
+export default function TextField({ passwordField = false, ...props }) {
   const [showPassword, setShowPassword] = useState(false);
 
   function handleClickShowPassword() {
@@ -42,5 +43,11 @@ export default function TextField({ passwordField, ...props }) {
       />
     );
   }
-  return <MuiTextField InputProps={{ className: 'rounded-2xl' }} {...props} />;
+  return (
+    <MuiTextField
+      InputProps={{ className: 'rounded-2xl' }}
+      type="text"
+      {...props}
+    />
+  );
 }
