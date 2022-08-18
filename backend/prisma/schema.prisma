@@ -30,3 +30,14 @@ enum Role {
   TICKETING_OFFICER
   TICKET_CHECKER
 }
+
+model Station {
+  stationId    String    @id
+  name         String
+  address      String
+  phoneNumber  String
+  routeCode    String
+  location     String
+  adjacentTo   Station[] @relation("AdjacentStations")
+  adjacentFrom Station[] @relation("AdjacentStations")
+}
