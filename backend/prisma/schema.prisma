@@ -11,16 +11,17 @@ generator client {
 }
 
 model User {
-  userId      String  @id @default(uuid())
-  email       String  @unique
+  userId      String   @id @default(uuid())
+  email       String   @unique
   password    String
   firstName   String
   lastName    String
   phoneNumber String
   nic         String
   address     String?
+  station     Station? @relation(fields: [stationId], references: [stationId])
+  role        Role     @default(PASSENGER)
   stationId   String?
-  role        Role    @default(PASSENGER)
 }
 
 enum Role {
@@ -32,12 +33,32 @@ enum Role {
 }
 
 model Station {
-  stationId    String    @id
+  stationId    String       @id
   name         String
   address      String
   phoneNumber  String
-  routeCode    String
   location     String
-  adjacentTo   Station[] @relation("AdjacentStations")
-  adjacentFrom Station[] @relation("AdjacentStations")
+  adjacentTo   Station[]    @relation("AdjacentStations")
+  adjacentFrom Station[]    @relation("AdjacentStations")
+  User         User[]
+  CrewMember   CrewMember[]
+}
+
+model CrewMember {
+  userId      String     @id @default(uuid())
+  firstName   String
+  lastName    String
+  phoneNumber String
+  nic         String
+  address     String?
+  station     Station    @relation(fields: [stationId], references: [stationId])
+  occupation  Occupation
+  stationId   String
+}
+
+enum Occupation {
+  DRIVER
+  DRIVER_ASSISTANT
+  HEAD_GUARD
+  UNDER_GUARD
 }

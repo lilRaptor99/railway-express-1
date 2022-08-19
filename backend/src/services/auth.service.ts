@@ -71,6 +71,7 @@ export async function createPassenger(
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = (await prisma.user.create({
+    // @ts-ignore
     data: {
       ...input,
       email,

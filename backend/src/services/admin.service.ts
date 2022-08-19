@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role, CrewMember } from '@prisma/client';
 import prisma from '../../prisma/prisma-client';
 
 export async function getUserDetails(role: Role, searchTerm: string) {
@@ -32,6 +32,22 @@ export async function getUserDetails(role: Role, searchTerm: string) {
   });
 
   return userList;
+}
+
+export async function AddCrewMembers(input: CrewMember) {
+  const crewMember = (await prisma.crewMember.create({
+    data: input,
+
+    select: {
+      userId: true,
+      occupation: true,
+    },
+  })) as CrewMember;
+
+  return {
+    ...input,
+    ...crewMember,
+  };
 }
 
 export function testFunction() {}

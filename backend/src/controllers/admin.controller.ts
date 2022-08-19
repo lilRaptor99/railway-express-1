@@ -1,7 +1,7 @@
-import { Role } from '@prisma/client';
+import { Role, CrewMember } from '@prisma/client';
 import { NextFunction, Request, Response, Router } from 'express';
 import { createDepartmentUser } from '../services/auth.service';
-import { getUserDetails } from '../services/admin.service';
+import { getUserDetails, AddCrewMembers } from '../services/admin.service';
 
 const router = Router();
 
@@ -35,6 +35,19 @@ router.get(
         req.params.searchTerm
       );
       res.json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Add crew members
+router.post(
+  '/crewMember',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const crewMember = await AddCrewMembers(req.body as CrewMember);
+      res.json(crewMember);
     } catch (error) {
       next(error);
     }
