@@ -7,7 +7,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from './contexts/authContext';
 import { Route, Routes } from 'react-router-dom';
 import RequireAuth from './utils/RequireAuth';
-import ManageUsers from 'pages/admin/ManageUsers';
+import ManageUsers from 'pages/admin/manageUsers/ManageUsers';
+import ManageCrewMembers from 'pages/admin/manageUsers/ManageCrewMembers';
 import Statistics from 'pages/admin/Statistics';
 import TrainLocation from 'pages/controlOfficer/TrainLocation';
 import AddTurn from 'pages/controlOfficer/AddTurn';
@@ -33,8 +34,11 @@ function App() {
                 <Route path="stats" element={<Statistics />} />
                 <Route path="tickets" element={<Tickets />} />
                 <Route path="add-account" element={<AddAccounts />} />
-                <Route path="manage-users" element={<ManageUsers />} />
                 <Route path="add-crew-members" element={<AddCrewMember />} />
+                <Route path="manage">
+                  <Route path="users" element={<ManageUsers />} />
+                  <Route path="crew-members" element={<ManageCrewMembers />} />
+                </Route>
               </Route>
               <Route
                 path="/control"
