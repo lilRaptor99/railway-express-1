@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 import useLocalStorage from '../hooks/useLocalStorage';
+import request from 'utils/request';
 
 const AuthContext = React.createContext(null);
 
@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
 
   async function login(email, password) {
     try {
-      const res = await axios.post('http://localhost:8080/api/login', {
+      const res = await request('post', '/login', {
         email,
         password,
       });

@@ -1,3 +1,5 @@
+import { readFileSync } from 'fs';
+import https from 'https';
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -53,6 +55,24 @@ app.use(
  */
 
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.info(`server up on port ${PORT}`);
-});
+
+if (process.env.ENVIRONMENT === 'PRODUCTION') {
+  const privateKey = readFileSync(process.env.CERT_PATH + '/privkey.pem');
+  const certificate = readFileSync(process.env.CERT_PATH + '/fullchain.pem');
+
+  https
+    .createServer(
+      {
+        key: privateKey,
+        cert: certificate,
+      },
+      app
+    )
+    .listen(PORT, () => {
+      console.info(`server up on port ${PORT}`);
+    });
+} else {
+  app.listen(PORT, () => {
+    console.info(`server up on port ${PORT}`);
+  });
+}

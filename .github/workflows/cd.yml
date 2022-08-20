@@ -1,0 +1,63 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Remove unnecessary files from deployment
+      - name: Remove unnecessary files
+        run: |
+          rm -r .git
+          rm -r .github
+          rm .gitignore README.md
+
+      # Setting up env
+      - name: Setting up env
+        run: |
+          touch ./backend/.env
+          echo "DATABASE_URL=postgresql://dbAdmin:railway!123@railway-express.postgres.database.azure.com/postgres?sslmode=require&schema=public
+          PORT=8080
+          ENVIRONMENT=PRODUCTION
+          CERT_PATH=/etc/letsencrypt/live/backend.railway-express.live
+          " >> ./backend/.env
+          cat ./backend/.env
+
+      # https://github.com/marketplace/actions/copy-via-ssh
+      - name: Copy content recursively to remote
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./backend/
+          remote: /root/backend
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.PASSWORD }}
+          tryKeyboard: false
+          rmRemote: true
+          concurrency: 5
+
+      # Install dependencies and start server
+      - name: Installing dependencies and starting server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: 22
+          script: |
+            cd backend
+            ls -lah
+            yarn install
+            yarn prisma:generate
+            tsc
+            cp -r ./media ./dist/
+            cp -r ./public ./dist/
+            cp -r ./.env ./dist/
+            pm2 restart ./dist/src/index.js
