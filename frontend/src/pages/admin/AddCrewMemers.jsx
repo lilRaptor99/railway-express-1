@@ -7,20 +7,14 @@ import * as Yup from 'yup';
 import Button from '../../components/Button';
 import TextField from '../../components/TextField';
 import { Close } from '@mui/icons-material';
-import {
-  Collapse,
-  Alert,
-  IconButton,
-  MenuItem,
-  Select,
-  Autocomplete,
-} from '@mui/material';
+import { Collapse, Alert, IconButton, MenuItem, Select } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import request from 'utils/request';
 
-export default function AddAccounts() {
-  const [regError, setRegError] = useState('');
-  const [regSuccess, setRegSuccess] = useState(false);
-  const [role, setRole] = useState('');
+export default function AddCrewMember() {
+  const [addError, setaddError] = useState('');
+  const [addSuccess, setaddSuccess] = useState(false);
+  const [occupation, setOccupation] = useState('');
   const [stations, setStations] = useState([]);
 
   useEffect(() => {
@@ -56,40 +50,34 @@ export default function AddAccounts() {
     nic: Yup.string()
       .min(10, ({ min }) => `NIC number must be at least ${min} characters`)
       .required('NIC number is required'),
+    phoneNumber: Yup.string()
+      .matches(phoneRegExp, 'Phone number format: +{country code}-{number}')
+      .required('Phone number is required'),
     address: Yup.string().min(
       10,
       ({ min }) => `Address must be at least ${min} characters`
     ),
-    role: Yup.string().required('Role is required'),
-    phoneNumber: Yup.string()
-      .matches(phoneRegExp, 'Phone number format: +{country code}-{number}')
-      .required('Phone number is required'),
-    email: Yup.string()
-      .email('Please enter valid email')
-      .required('Email Address is Required'),
   });
 
   async function handleSubmit(values, { setSubmitting, resetForm }) {
-    // @ts-ignore
-    const submitValues = {
-      ...values,
-      role: undefined,
-      // @ts-ignore
-      stationId: selectedStation?.stationId,
-    };
-    setRegError('');
-    setRegSuccess(false);
+    setaddError('');
+    setaddSuccess(false);
     try {
-      await request('post', `/admin/user/${values.role}`, submitValues);
-      setRegSuccess(true);
+      // @ts-ignore
+      await request('post', `/admin/crewMember`, {
+        ...values,
+        // @ts-ignore
+        stationId: selectedStation?.stationId,
+      });
+      setaddSuccess(true);
       resetForm();
     } catch (e) {
       if (e?.response?.status === 500) {
-        setRegError('Error creating user');
-        console.error('Creation Error: ', e);
+        setaddError('Error adding crew member');
+        console.error('Adding Error: ', e);
       } else {
         console.log(e?.response?.data);
-        setRegError(e?.response?.data?.errors[0]);
+        setaddError(e?.response?.data?.errors[0]);
       }
     } finally {
       setSubmitting(false);
@@ -98,12 +86,11 @@ export default function AddAccounts() {
 
   return (
     <AdminLayout>
-      <h1 className="">Add users</h1>
-      {/* <div className="min-h-screen w-full bg-slate-700 flex justify-center items-center"> */}
+      <h1 className="">Add Crew Members</h1>
       <div className="bg-slate-100 rounded-3xl p-8">
         <div>
           <div className="mb-4">
-            <Collapse in={Boolean(regError)}>
+            <Collapse in={Boolean(addError)}>
               <Alert
                 severity="error"
                 action={
@@ -112,18 +99,18 @@ export default function AddAccounts() {
                     color="inherit"
                     size="small"
                     onClick={() => {
-                      setRegError(null);
+                      setaddError(null);
                     }}
                   >
                     <Close fontSize="inherit" />
                   </IconButton>
                 }
               >
-                {regError}
+                {addError}
               </Alert>
             </Collapse>
 
-            <Collapse in={Boolean(regSuccess)}>
+            <Collapse in={Boolean(addSuccess)}>
               <Alert
                 severity="success"
                 action={
@@ -132,28 +119,26 @@ export default function AddAccounts() {
                     color="inherit"
                     size="small"
                     onClick={() => {
-                      setRegSuccess(null);
+                      setaddSuccess(null);
                     }}
                   >
                     <Close fontSize="inherit" />
                   </IconButton>
                 }
               >
-                Accout created successfully.
+                Crew member added successfully.
               </Alert>
             </Collapse>
           </div>
           <Formik
             validationSchema={regValidationSchema}
             initialValues={{
-              email: '',
               firstName: '',
               lastName: '',
               nic: '',
               phoneNumber: '',
               address: '',
-              stationId: '',
-              role: '',
+              occupation: '',
             }}
             onSubmit={handleSubmit}
           >
@@ -210,20 +195,6 @@ export default function AddAccounts() {
                       )}
                       helperText={formik.errors.phoneNumber}
                     />
-                    <p className="col-start-1 col-end-2">Email</p>
-                    <TextField
-                      className="col-start-3 col-end-7"
-                      fullWidth
-                      id="email"
-                      name="email"
-                      type="email"
-                      {...formik.getFieldProps('email')}
-                      error={Boolean(
-                        formik.touched.email && formik.errors.email
-                      )}
-                      helperText={formik.errors.email}
-                      passwordField={false}
-                    />
                     <p className="col-start-1 col-end-2">Address</p>
                     <TextField
                       className="col-start-3 col-end-7"
@@ -236,24 +207,24 @@ export default function AddAccounts() {
                       )}
                       helperText={formik.errors.address}
                     />
-                    <p className="col-start-1 col-end-2">Role</p>
+                    <p className="col-start-1 col-end-2">Occupation</p>
                     <Select
                       labelId="select"
                       className="col-start-3 col-end-7 rounded-2xl"
-                      id="role"
-                      name="role"
-                      value={role}
-                      onChange={(event) => setRole(event.target.value)}
-                      {...formik.getFieldProps('role')}
+                      id="occupation"
+                      name="occupation"
+                      value={occupation}
+                      onChange={(event) => setOccupation(event.target.value)}
+                      {...formik.getFieldProps('occupation')}
                     >
-                      <MenuItem value="CONTROL_OFFICER">
-                        Control Officer
+                      <MenuItem value="DRIVER">Driver</MenuItem>
+                      <MenuItem value="ASSISTANT_DRIVER">
+                        Assistant Driver
                       </MenuItem>
-                      <MenuItem value="TICKETING_OFFICER">
-                        Ticketing Officer
-                      </MenuItem>
-                      <MenuItem value="TICKET_CHECKER">Ticket Checker</MenuItem>
+                      <MenuItem value="HEAD_GUARD">Head Guard</MenuItem>
+                      <MenuItem value="UNDER_GUARD">Under Guard</MenuItem>
                     </Select>
+
                     <p className="col-start-1 col-end-2">Station</p>
                     <Autocomplete
                       disablePortal
@@ -276,7 +247,7 @@ export default function AddAccounts() {
                     />
                   </div>
                   <Button type="submit" isLoading={formik.isSubmitting}>
-                    Create Account
+                    Add crew member
                   </Button>
                 </form>
               </>
@@ -284,7 +255,6 @@ export default function AddAccounts() {
           </Formik>
         </div>
       </div>
-      {/* </div> */}
     </AdminLayout>
   );
 }

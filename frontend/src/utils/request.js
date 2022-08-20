@@ -1,7 +1,7 @@
 import axios from 'axios';
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export default async function request(method = 'get', endpoint, data) {
+export default async function request(method, endpoint, data = null) {
   const item = window?.localStorage?.getItem('currentUser');
 
   const currentUser = item ? JSON.parse(item) : null;

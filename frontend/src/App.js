@@ -15,6 +15,7 @@ import NormalTickets from 'pages/ticketingOfficer/NormalTickets';
 import SeasonTickets from 'pages/ticketingOfficer/SeasonTickets';
 import AddAccounts from 'pages/admin/AddAccounts';
 import Tickets from 'pages/admin/Tickets';
+import AddCrewMember from 'pages/admin/AddCrewMemers';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
                 <Route path="tickets" element={<Tickets />} />
                 <Route path="add-account" element={<AddAccounts />} />
                 <Route path="manage-users" element={<ManageUsers />} />
+                <Route path="add-crew-members" element={<AddCrewMember />} />
               </Route>
               <Route
                 path="/control"
