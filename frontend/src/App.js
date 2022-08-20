@@ -17,6 +17,7 @@ import SeasonTickets from 'pages/ticketingOfficer/SeasonTickets';
 import AddAccounts from 'pages/admin/AddAccounts';
 import Tickets from 'pages/admin/Tickets';
 import AddCrewMember from 'pages/admin/AddCrewMemers';
+import ReserveSeats from 'pages/ticketingOfficer/ReserveSeats';
 
 function App() {
   return (
@@ -53,6 +54,7 @@ function App() {
               >
                 <Route path="normal" element={<NormalTickets />} />
                 <Route path="season" element={<SeasonTickets />} />
+                <Route path="reserve" element={<ReserveSeats />} />
               </Route>
             </Routes>
           </AuthProvider>
