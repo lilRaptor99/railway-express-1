@@ -26,7 +26,6 @@ export function isAuthorized(userType: Role, req: Request, next: NextFunction) {
     throw new HttpException(401, { errors: ['Unauthorized!'] });
   }
 }
-
 const auth = {
   required: jwt({
     secret: process.env.JWT_SECRET || 'superSecret',

@@ -20,7 +20,7 @@ export async function login(
   }
   const matchedUser = (await prisma.user.findFirst({
     where: { email },
-  })) as User;
+  })) as unknown as User;
 
   if (!matchedUser) {
     throw new HttpException(401, { errors: ['Incorrect email or password'] });

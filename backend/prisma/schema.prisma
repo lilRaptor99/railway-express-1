@@ -11,17 +11,18 @@ generator client {
 }
 
 model User {
-  userId      String   @id @default(uuid())
-  email       String   @unique
-  password    String
-  firstName   String
-  lastName    String
-  phoneNumber String
-  nic         String
-  address     String?
-  station     Station? @relation(fields: [stationId], references: [stationId])
-  role        Role     @default(PASSENGER)
-  stationId   String?
+  userId       String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  firstName    String
+  lastName     String
+  phoneNumber  String
+  nic          String
+  address      String?
+  station      Station? @relation(fields: [stationId], references: [stationId])
+  role         Role     @default(PASSENGER)
+  stationId    String?
+  initialLogIn Boolean  @default(true)
 }
 
 enum Role {

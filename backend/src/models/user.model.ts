@@ -7,4 +7,5 @@ export interface User {
   phoneNumber: string;
   nic: string;
   role: string;
+  initialLogIn: boolean;
 }

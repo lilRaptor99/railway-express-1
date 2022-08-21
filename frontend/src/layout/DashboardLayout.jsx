@@ -14,6 +14,10 @@ export default function DashboardLayout({ sidebarButtons, children }) {
     navigate('/');
   }
 
+  function HandleUserProfileView() {
+    navigate('/user-profile');
+  }
+
   return (
     <div className="bg-slate-700 min-w-full min-h-screen flex">
       <nav className="min-w-fit bg-slate-700 min-h-full flex flex-col justify-between">
@@ -29,7 +33,10 @@ export default function DashboardLayout({ sidebarButtons, children }) {
             {sidebarButtons.map((SidebarButton) => SidebarButton)}
           </div>
         </div>
-        <div className="self-center flex items-center justify-center bg-slate-900 p-2 w-fit rounded-full mt-8 mb-32">
+        <div
+          className="self-center flex items-center justify-center bg-slate-900 p-2 w-fit rounded-full mt-8 mb-32 hover:bg-slate-800 cursor-pointer"
+          onClick={HandleUserProfileView}
+        >
           <img src={Logo} alt="Profile Icon" className="h-14 w-14" />
 
           <div className="text-slate-200 ml-4 mr-2 text-xs w-28">

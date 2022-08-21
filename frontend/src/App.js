@@ -18,6 +18,7 @@ import AddAccounts from 'pages/admin/AddAccounts';
 import Tickets from 'pages/admin/Tickets';
 import AddCrewMember from 'pages/admin/AddCrewMemers';
 import ReserveSeats from 'pages/ticketingOfficer/ReserveSeats';
+import UserProfile from 'pages/UserProfile';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <AuthProvider>
             <Routes>
               <Route path="/" element={<Login />} />
+              <Route path="/user-profile" element={<UserProfile />} />
               <Route
                 path="/admin"
                 element={<RequireAuth authorizedUserRole="ADMIN" />}

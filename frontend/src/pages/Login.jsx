@@ -19,6 +19,10 @@ export default function Login() {
 
   // Navigate logged in user
   useEffect(() => {
+    if (currentUser?.initialLogIn) {
+      navigate('/user-profile?initialLogIn=true', { replace: true });
+      return;
+    }
     switch (currentUser?.role) {
       case 'ADMIN':
         navigate('/admin/stats', { replace: true });
