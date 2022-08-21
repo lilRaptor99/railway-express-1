@@ -19,6 +19,10 @@ import Tickets from 'pages/admin/Tickets';
 import AddCrewMember from 'pages/admin/AddCrewMemers';
 import ReserveSeats from 'pages/ticketingOfficer/ReserveSeats';
 import UserProfile from 'pages/UserProfile';
+import AllocateCrewMembers from 'pages/controlOfficer/AllocateCrewMembers';
+import ComplaintsSuggestions from 'pages/controlOfficer/ComplaintsSuggessions';
+import SearchTurns from 'pages/controlOfficer/SearchTurns';
+import ComplaintOrSuggestion from 'pages/controlOfficer/complaintsSuggestions/ComplaintOrSuggestion';
 
 function App() {
   return (
@@ -49,6 +53,18 @@ function App() {
               >
                 <Route path="train-location" element={<TrainLocation />} />
                 <Route path="add-turn" element={<AddTurn />} />
+                <Route path="allocate-crew" element={<AllocateCrewMembers />} />
+                <Route path="search-turn" element={<SearchTurns />} />
+                <Route
+                  path="complaints-suggestions"
+                  element={<ComplaintsSuggestions />}
+                />
+                <Route path="complaints-suggestions">
+                  <Route
+                    path="description"
+                    element={<ComplaintOrSuggestion />}
+                  />
+                </Route>
               </Route>
               <Route
                 path="/ticketing"

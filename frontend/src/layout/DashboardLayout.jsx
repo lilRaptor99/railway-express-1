@@ -33,13 +33,13 @@ export default function DashboardLayout({ sidebarButtons, children }) {
             {sidebarButtons.map((SidebarButton) => SidebarButton)}
           </div>
         </div>
-        <div
-          className="self-center flex items-center justify-center bg-slate-900 p-2 w-fit rounded-full mt-8 mb-32 hover:bg-slate-800 cursor-pointer"
-          onClick={HandleUserProfileView}
-        >
+        <div className="self-center flex items-center justify-center bg-slate-900 p-2 w-fit rounded-full mt-8 mb-32 hover:bg-slate-800">
           <img src={Logo} alt="Profile Icon" className="h-14 w-14" />
 
-          <div className="text-slate-200 ml-4 mr-2 text-xs w-28">
+          <div
+            onClick={HandleUserProfileView}
+            className="text-slate-200 ml-4 mr-2 text-xs w-28 cursor-pointer"
+          >
             <div>
               {currentUser?.firstName} {currentUser?.lastName}
             </div>
