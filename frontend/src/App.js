@@ -10,6 +10,7 @@ import RequireAuth from './utils/RequireAuth';
 import ManageUsers from 'pages/admin/manageUsers/ManageUsers';
 import ManageCrewMembers from 'pages/admin/manageUsers/ManageCrewMembers';
 import Statistics from 'pages/admin/Statistics';
+// @ts-ignore
 import TrainLocation from 'pages/controlOfficer/TrainLocation';
 import AddTurn from 'pages/controlOfficer/AddTurn';
 import NormalTickets from 'pages/ticketingOfficer/NormalTickets';

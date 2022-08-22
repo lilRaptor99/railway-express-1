@@ -159,7 +159,8 @@ export default function AddTurn() {
                       </TableBody>
                     </Table>
                     <IconButton
-                      className="col-start-3 col-end-7 h-10 w-10 bg-slate-700 text-slate-50"
+                      className="col-start-3 col-end-7 h-10 w-10 bg-slate-700 text-slate-50 hover:bg-slate-900
+                      "
                       onClick={() => handleAdd()}
                       edge="end"
                     >
