@@ -16,17 +16,15 @@ import { useAuth } from '../../contexts/authContext';
 import { theme } from '../../../reactNativePaperTheme';
 
 const loginValidationSchema = yup.object().shape({
-  email: yup
+  // @ts-ignore
+  verificationCode: yup
     .string()
-    .email('Please enter valid email')
-    .required('Email Address is Required'),
-  password: yup
-    .string()
-    .min(8, ({ min }) => `Password must be at least ${min} characters`)
-    .required('Password is required'),
+    .required('Required!')
+    .min(4, 'Must be 4 characters long')
+    .max(4, 'Must be 4 characters long'),
 });
 
-export default function Login({ navigation }) {
+export default function VerifyEmail({ navigation }) {
   const { login } = useAuth();
   const [loginError, setLoginError] = useState(null);
   const [loginSuccess, setLoginSuccess] = useState(false);
@@ -36,12 +34,13 @@ export default function Login({ navigation }) {
     setLoginSuccess(false);
 
     try {
-      await login(values.email, values.password);
-      setLoginSuccess(true);
+      setTimeout(() => {
+        setLoginSuccess(true);
+      }, 500);
       setTimeout(() => {
         setLoginSuccess(false);
-        navigation.navigate('Search Trains');
-      }, 1500);
+        navigation.navigate('Login');
+      }, 2500);
     } catch (e) {
       if (e?.response?.status === 401) {
         setLoginError('Incorrect Email or Password');
@@ -69,10 +68,12 @@ export default function Login({ navigation }) {
         </View>
 
         <KeyboardAvoidingView className="flex-1 items-center mx-12">
-          <Text className="text-4xl font-normal mb-4">Login</Text>
+          <Text className="text-xl font-normal mb-4">
+            Enter verification code sent to your email to continue:
+          </Text>
           <Formik
             validationSchema={loginValidationSchema}
-            initialValues={{ email: '', password: '' }}
+            initialValues={{ verificationCode: null }}
             onSubmit={handleLoginSubmit}
           >
             {({
@@ -87,22 +88,15 @@ export default function Login({ navigation }) {
             }) => (
               <>
                 <TextInput
-                  name="email"
-                  label="Email"
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                  keyboardType="email-address"
-                  errorText={touched.email ? errors.email : null}
-                />
-                <TextInput
-                  name="password"
-                  label="Password"
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                  secureTextEntry
-                  errorText={touched.password ? errors.password : null}
+                  name="verificationCode"
+                  label="Verification Code"
+                  onChangeText={handleChange('verificationCode')}
+                  onBlur={handleBlur('verificationCode')}
+                  value={values.verificationCode}
+                  keyboardType="numeric"
+                  errorText={
+                    touched.verificationCode ? errors.verificationCode : null
+                  }
                 />
                 <Button
                   mode="contained"
@@ -111,18 +105,11 @@ export default function Login({ navigation }) {
                   disabled={!isValid || isSubmitting}
                   loading={isSubmitting}
                 >
-                  Login
+                  Verify Email
                 </Button>
               </>
             )}
           </Formik>
-          <Button
-            mode="text"
-            className="mt-6"
-            onPress={() => navigation.navigate('ForgotPassword')}
-          >
-            Forgot Password?
-          </Button>
         </KeyboardAvoidingView>
       </ScrollView>
       <Snackbar
@@ -141,7 +128,7 @@ export default function Login({ navigation }) {
         onDismiss={() => {}}
         style={{ backgroundColor: theme.colors.success }}
       >
-        Login success! Redirecting to search...
+        Verification success! Redirecting to login...
       </Snackbar>
     </>
   );

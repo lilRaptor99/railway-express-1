@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { getStations } from '../services/public.service';
+import { getStations, verifyEmail } from '../services/public.service';
 
 const router = Router();
 
@@ -18,4 +18,22 @@ router.get(
   }
 );
 
+/**
+ * Add Stations
+ */
+router.post(
+  '/verify-email',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const verifyKey = await verifyEmail(
+        req.body.email,
+        req.body.firstName,
+        req.body.lastName
+      );
+      res.json({ verifyKey });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 export default router;

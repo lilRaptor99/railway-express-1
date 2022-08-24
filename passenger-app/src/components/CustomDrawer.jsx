@@ -31,7 +31,7 @@ export default function CustomDrawer(props) {
         }}
       >
         <View className="flex-1 items-center mb-8" style={{ maxHeight: 200 }}>
-          <Image source={DrawerLogo} style={{ height: 200, width: 280 }} />
+          <Image source={DrawerLogo} style={{ height: 180, width: 280 }} />
         </View>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>

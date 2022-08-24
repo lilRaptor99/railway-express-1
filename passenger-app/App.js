@@ -18,6 +18,12 @@ import StationSchedule from './src/screens/timeTables/StationSchedule';
 import Login from './src/screens/auth/Login';
 import Register from './src/screens/auth/Register';
 import ForgotPassword from './src/screens/auth/ForgotPassword';
+import TrainDetails from './src/screens/search/TrainDetails';
+import VerifyEmail from './src/screens/auth/VerifyEmail';
+import MyTickets from './src/screens/tickets/MyTickets';
+import BuyTickets from './src/screens/buyTickets/BuyTickets';
+import ReserveSeats from './src/screens/reserveSeats/ReserveSeats';
+import MyProfile from './src/screens/myProfile/MyProfile';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -39,6 +45,11 @@ function SearchNavigators() {
         name="SearchResults"
         component={SearchResults}
         initialParams={{ screenTitle: 'Available Trains' }}
+      />
+      <Stack.Screen
+        name="TrainDetails"
+        component={TrainDetails}
+        initialParams={{ screenTitle: 'Train details' }}
       />
     </Stack.Navigator>
   );
@@ -74,7 +85,7 @@ function MyTicketsNavigators() {
     >
       <Stack.Screen
         name="MyTickets"
-        component={SearchTimeTable}
+        component={MyTickets}
         initialParams={{ screenTitle: 'My Tickets' }}
       />
     </Stack.Navigator>
@@ -103,6 +114,60 @@ function AuthNavigators() {
         component={ForgotPassword}
         initialParams={{ screenTitle: 'Reset Password - Railway Express' }}
       />
+      <Stack.Screen
+        name="VerifyEmail"
+        component={VerifyEmail}
+        initialParams={{ screenTitle: 'Verify Email - Railway Express' }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function BuyTicketsNavigators() {
+  return (
+    <Stack.Navigator
+      initialRouteName="BuyTickets"
+      screenOptions={{
+        header: (props) => <CustomNavigationBar {...props} />,
+      }}
+    >
+      <Stack.Screen
+        name="BuyTickets"
+        component={BuyTickets}
+        initialParams={{ screenTitle: 'Buy Tickets' }}
+      />
+    </Stack.Navigator>
+  );
+}
+function ReserveSeatsNavigators() {
+  return (
+    <Stack.Navigator
+      initialRouteName="ReserveSeats"
+      screenOptions={{
+        header: (props) => <CustomNavigationBar {...props} />,
+      }}
+    >
+      <Stack.Screen
+        name="ReserveSeats"
+        component={ReserveSeats}
+        initialParams={{ screenTitle: 'Reserve Seats' }}
+      />
+    </Stack.Navigator>
+  );
+}
+function MyProfileNavigators() {
+  return (
+    <Stack.Navigator
+      initialRouteName="MyProfile"
+      screenOptions={{
+        header: (props) => <CustomNavigationBar {...props} />,
+      }}
+    >
+      <Stack.Screen
+        name="MyProfile"
+        component={MyProfile}
+        initialParams={{ screenTitle: 'My Profile' }}
+      />
     </Stack.Navigator>
   );
 }
@@ -111,13 +176,20 @@ export default function App() {
   const drawerScreenOptions = ({ icon }) => {
     return {
       drawerIcon: ({ color }) => (
-        <IconButton size={30} icon={icon} color={color} />
+        <IconButton size={22} icon={icon} color={color} />
       ),
-      drawerLabelStyle: { fontSize: 17 },
+      drawerLabelStyle: {
+        fontSize: 17,
+        marginTop: 0,
+        marginBottom: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
+      },
       drawerInactiveTintColor: '#94a3b8',
       drawerInactiveBackgroundColor: '#3d4252',
       drawerActiveTintColor: 'white',
       drawerActiveBackgroundColor: 'rgba(0, 0, 0, 0.06)',
+      drawerItemStyle: { marginTop: 0, marginBottom: 0, padding: 0 },
     };
   };
 
@@ -148,13 +220,28 @@ export default function App() {
                 component={TimeTableNavigators}
                 options={drawerScreenOptions({ icon: 'table-large' })}
               />
+              <Drawer.Screen
+                name="Buy Tickets"
+                component={BuyTicketsNavigators}
+                options={drawerScreenOptions({ icon: 'cards' })}
+              />
+              <Drawer.Screen
+                name="Reserve Seats"
+                component={ReserveSeatsNavigators}
+                options={drawerScreenOptions({ icon: 'seat-recline-extra' })}
+              />
+              {/* <Drawer.Screen
+                name="My Profile"
+                component={MyProfileNavigators}
+                options={drawerScreenOptions({ icon: 'card-account-details' })}
+              /> */}
 
               <Drawer.Screen
                 name="AuthNavigators"
                 component={AuthNavigators}
                 options={{
-                  drawerItemStyle: { display: 'none' },
                   ...drawerScreenOptions({ icon: 'login' }),
+                  drawerItemStyle: { display: 'none' },
                 }}
               />
             </Drawer.Navigator>
