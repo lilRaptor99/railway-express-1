@@ -5784,6 +5784,13 @@ react-is@^18.1.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
+react-native-autocomplete-input@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-autocomplete-input/-/react-native-autocomplete-input-5.1.1.tgz#ce2d2cdba877cf8e6edc7588048de372792a8dcb"
+  integrity sha512-a2w1WrkjSBeSSFjA5C+haK3dQhoGpmxEDICCvmxs/58QNBkK6f+ApDuNJmXYS41mrc7ScNPPSndFxn4YbPtr6A==
+  dependencies:
+    deprecated-react-native-prop-types "^2.3.0"
+
 react-native-codegen@^0.0.17:
   version "0.0.17"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.0.17.tgz#83fb814d94061cbd46667f510d2ddba35ffb50ac"

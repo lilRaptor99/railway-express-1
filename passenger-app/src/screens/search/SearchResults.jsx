@@ -5,11 +5,11 @@ import { ScrollView, KeyboardAvoidingView } from 'react-native';
 export default function SearchResults({ route, navigation }) {
   const { from, to } = route.params;
 
-  // useEffect(() => {
-  //   navigation.setParams({
-  //     screenTitle: `Available trains [ ${from} - ${to} ]`,
-  //   });
-  // }, []);
+  useEffect(() => {
+    navigation.setParams({
+      screenTitle: `Available trains [ ${from} - ${to} ]`,
+    });
+  }, []);
 
   return (
     <ScrollView

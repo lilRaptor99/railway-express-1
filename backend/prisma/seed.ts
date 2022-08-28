@@ -167,6 +167,11 @@ const defaultCrewMembers: CrewMember[] = [
   },
 ];
 
+// const graph = {
+//   FOT: ['MRD', 'KLL'],
+//   MRD: ['FOT', 'DMT', 'BSL']
+// }
+
 const defaultStations: any[] = [
   {
     stationId: 'FOT',
