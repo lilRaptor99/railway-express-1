@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { IconButton, Provider as PaperProvider } from 'react-native-paper';
-import { AuthProvider } from './src/contexts/authContext';
+import { AuthProvider, useAuth } from './src/contexts/authContext';
 
 import CustomDrawer from './src/components/CustomDrawer';
 import CustomNavigationBar from './src/components/CustomNavigationBar';
@@ -24,9 +24,10 @@ import MyTickets from './src/screens/tickets/MyTickets';
 import BuyTickets from './src/screens/buyTickets/BuyTickets';
 import ReserveSeats from './src/screens/reserveSeats/ReserveSeats';
 import MyProfile from './src/screens/myProfile/MyProfile';
+import { useEffect, useState } from 'react';
 
-const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
+export const Stack = createNativeStackNavigator();
+export const Drawer = createDrawerNavigator();
 
 function SearchNavigators() {
   return (
@@ -173,6 +174,34 @@ function MyProfileNavigators() {
 }
 
 export default function App() {
+  const { currentUser } = useAuth();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      setUser(await currentUser);
+    })();
+  }, [currentUser]);
+
+  function getUserScreens() {
+    if (user) {
+      return (
+        <>
+          <Drawer.Screen
+            name="My Tickets"
+            component={MyTicketsNavigators}
+            options={drawerScreenOptions({ icon: 'barcode' })}
+          />
+          <Drawer.Screen
+            name="My Profile"
+            component={MyProfileNavigators}
+            options={drawerScreenOptions({ icon: 'card-account-details' })}
+          />
+        </>
+      );
+    } else return null;
+  }
+
   const drawerScreenOptions = ({ icon }) => {
     return {
       drawerIcon: ({ color }) => (
@@ -194,60 +223,49 @@ export default function App() {
   };
 
   return (
-    <AuthProvider>
-      <TailwindProvider>
-        <PaperProvider theme={theme}>
-          <NavigationContainer theme={theme}>
-            <Drawer.Navigator
-              initialRouteName="Search Trains"
-              screenOptions={{
-                header: () => undefined,
-              }}
-              drawerContent={CustomDrawer}
-            >
-              <Drawer.Screen
-                name="Search Trains"
-                component={SearchNavigators}
-                options={drawerScreenOptions({ icon: 'magnify' })}
-              />
-              <Drawer.Screen
-                name="My Tickets"
-                component={MyTicketsNavigators}
-                options={drawerScreenOptions({ icon: 'barcode' })}
-              />
-              <Drawer.Screen
-                name="Time Tables"
-                component={TimeTableNavigators}
-                options={drawerScreenOptions({ icon: 'table-large' })}
-              />
-              <Drawer.Screen
-                name="Buy Tickets"
-                component={BuyTicketsNavigators}
-                options={drawerScreenOptions({ icon: 'cards' })}
-              />
-              <Drawer.Screen
-                name="Reserve Seats"
-                component={ReserveSeatsNavigators}
-                options={drawerScreenOptions({ icon: 'seat-recline-extra' })}
-              />
-              {/* <Drawer.Screen
-                name="My Profile"
-                component={MyProfileNavigators}
-                options={drawerScreenOptions({ icon: 'card-account-details' })}
-              /> */}
+    <TailwindProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer theme={theme}>
+          <Drawer.Navigator
+            initialRouteName="Search Trains"
+            screenOptions={{
+              header: () => undefined,
+            }}
+            drawerContent={CustomDrawer}
+          >
+            <Drawer.Screen
+              name="Search Trains"
+              component={SearchNavigators}
+              options={drawerScreenOptions({ icon: 'magnify' })}
+            />
+            <Drawer.Screen
+              name="Time Tables"
+              component={TimeTableNavigators}
+              options={drawerScreenOptions({ icon: 'table-large' })}
+            />
+            <Drawer.Screen
+              name="Buy Tickets"
+              component={BuyTicketsNavigators}
+              options={drawerScreenOptions({ icon: 'cards' })}
+            />
+            <Drawer.Screen
+              name="Reserve Seats"
+              component={ReserveSeatsNavigators}
+              options={drawerScreenOptions({ icon: 'seat-recline-extra' })}
+            />
+            {getUserScreens()}
 
-              <Drawer.Screen
-                name="AuthNavigators"
-                component={AuthNavigators}
-                options={{
-                  ...drawerScreenOptions({ icon: 'login' }),
-                  drawerItemStyle: { display: 'none' },
-                }}
-              />
-            </Drawer.Navigator>
-          </NavigationContainer>
-        </PaperProvider>
-      </TailwindProvider>
-    </AuthProvider>
+            <Drawer.Screen
+              name="AuthNavigators"
+              component={AuthNavigators}
+              options={{
+                ...drawerScreenOptions({ icon: 'login' }),
+                drawerItemStyle: { display: 'none' },
+              }}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </TailwindProvider>
   );
 }

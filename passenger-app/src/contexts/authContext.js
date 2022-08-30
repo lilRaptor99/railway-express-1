@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 import useLocalStorage from '../hooks/useLocalStorage';
-import request from '../utils/request';
+import request, { setUserToken } from '../utils/request';
 
 const AuthContext = React.createContext(null);
 
@@ -20,6 +19,7 @@ export function AuthProvider({ children }) {
       });
       // @ts-ignore
       await setCurrentUser(res.data);
+      setUserToken(res.data.token);
       return res.data;
     } catch (e) {
       throw e;

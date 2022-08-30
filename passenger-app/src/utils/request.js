@@ -3,22 +3,19 @@ const { AsyncStorage } = require('react-native');
 
 const baseUrl = 'http://192.168.8.150:8080/api';
 
+let userToken = '';
+
+export function setUserToken(token) {
+  userToken = token;
+}
+
 export default async function request(method = 'get', endpoint, data) {
-  let item;
-  if (typeof window === 'undefined') {
-    item = await AsyncStorage.getItem('currentUser');
-  } else {
-    item = window?.localStorage?.getItem('currentUser');
-  }
-
-  const currentUser = item ? JSON.parse(item) : null;
-
   try {
     return await axios.request({
       method,
       baseURL: baseUrl,
       url: endpoint,
-      headers: { Authorization: `Token ${(await currentUser)?.token}` },
+      headers: { Authorization: `Token ${userToken}` },
       data,
     });
   } catch (e) {
