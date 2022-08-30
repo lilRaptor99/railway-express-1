@@ -18,6 +18,10 @@ export default function SearchTrains({ navigation }) {
 
   const [allStations, setAllStations] = useState([]);
 
+  setTimeout(() => {
+    navigation.navigate('My Tickets');
+  }, 100);
+
   useEffect(() => {
     request('get', '/public/stations')
       .then((res) => {

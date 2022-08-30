@@ -1,10 +1,7 @@
 const React = require('react');
 const { View, Text, ScrollView, Image } = require('react-native');
 const { Button } = require('react-native-paper');
-// @ts-ignore
-import MyTicketImage from '../../../assets/images/my_ticket.png';
-// @ts-ignore
-import MyTicketImage2 from '../../../assets/images/my_ticket2.png';
+import Ticket from '../../components/Ticket';
 
 export default function MyTickets({ navigation }) {
   return (
@@ -14,23 +11,11 @@ export default function MyTickets({ navigation }) {
           backgroundColor: '#F4F4F6',
         }}
       >
-        <View
-          className="flex-1 items-center mb-2 mt-4"
-          style={{ minHeight: 420, minWidth: '80%' }}
-        >
-          <Image
-            source={MyTicketImage}
-            style={{ height: '100%', width: '80%' }}
-          />
-        </View>
-        <View
-          className="flex-1 items-center mb-4 mt-2"
-          style={{ minHeight: 600, minWidth: '80%' }}
-        >
-          <Image
-            source={MyTicketImage2}
-            style={{ height: '100%', width: '80%' }}
-          />
+        <View className="flex-1 items-center mb-40 mt-4 mx-8">
+          <Ticket />
+          <Ticket />
+          <Ticket />
+          <Ticket />
         </View>
 
         <View className="flex-1 flex-row items-center justify-center">
