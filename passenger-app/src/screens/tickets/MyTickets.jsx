@@ -11,20 +11,10 @@ export default function MyTickets({ navigation }) {
           backgroundColor: '#F4F4F6',
         }}
       >
-        <View className="flex-1 items-center mb-40 mt-4 mx-8">
+        <View className="flex-1 items-center mb-8 mt-4 w-full px-8">
           <Ticket />
-          <Ticket />
-          <Ticket />
-          <Ticket />
-        </View>
-
-        <View className="flex-1 flex-row items-center justify-center">
-          <Button mode="contained" className="mr-12" onPress={() => {}}>
-            Buy Tickets
-          </Button>
-          <Button mode="contained" className="" onPress={() => {}}>
-            Reserve seats
-          </Button>
+          <Ticket ticketType="Normal" />
+          <Ticket ticketType="Normal" status="Expired" />
         </View>
       </ScrollView>
     </>

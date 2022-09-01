@@ -253,6 +253,11 @@ export default function App() {
               component={ReserveSeatsNavigators}
               options={drawerScreenOptions({ icon: 'seat-recline-extra' })}
             />
+            <Drawer.Screen
+              name="My Tickets"
+              component={MyTicketsNavigators}
+              options={drawerScreenOptions({ icon: 'barcode' })}
+            />
             {getUserScreens()}
 
             <Drawer.Screen
