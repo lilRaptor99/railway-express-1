@@ -11,18 +11,20 @@ generator client {
 }
 
 model User {
-  userId       String   @id @default(uuid())
-  email        String   @unique
-  password     String
-  firstName    String
-  lastName     String
-  phoneNumber  String
-  nic          String
-  address      String?
-  station      Station? @relation(fields: [stationId], references: [stationId])
-  role         Role     @default(PASSENGER)
-  stationId    String?
-  initialLogIn Boolean  @default(true)
+  userId        String          @id @default(uuid())
+  email         String          @unique
+  password      String
+  firstName     String
+  lastName      String
+  phoneNumber   String
+  nic           String
+  address       String?
+  station       Station?        @relation(fields: [stationId], references: [stationId])
+  role          Role            @default(PASSENGER)
+  stationId     String?
+  initialLogIn  Boolean         @default(true)
+  status        Status          @default(ACTIVE)
+  ReasonToBlock ReasonToBlock[]
 }
 
 enum Role {
@@ -31,6 +33,11 @@ enum Role {
   CONTROL_OFFICER
   TICKETING_OFFICER
   TICKET_CHECKER
+}
+
+enum Status {
+  ACTIVE
+  BANNED
 }
 
 model Station {
@@ -50,11 +57,12 @@ model CrewMember {
   firstName   String
   lastName    String
   phoneNumber String
-  nic         String
+  nic         String     @unique
   address     String?
   station     Station    @relation(fields: [stationId], references: [stationId])
   occupation  Occupation
   stationId   String
+  visibility  Visibility @default(VISIBLE)
 }
 
 enum Occupation {
@@ -62,4 +70,15 @@ enum Occupation {
   DRIVER_ASSISTANT
   HEAD_GUARD
   UNDER_GUARD
+}
+
+enum Visibility {
+  HIDDEN
+  VISIBLE
+}
+
+model ReasonToBlock {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [userId])
+  reason String
 }

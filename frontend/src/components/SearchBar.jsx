@@ -18,7 +18,14 @@ export default function SearchBar({ handleSearch, ...props }) {
             </InputAdornment>
           ),
         }}
-        onChange={(event) => setSearch(event.target.value)}
+        onKeyUp={(e) => {
+          if (e.keyCode === 13) {
+            handleSearch(search);
+          }
+        }}
+        onChange={(event) => {
+          setSearch(event.target.value);
+        }}
         fullWidth
         {...props}
       />

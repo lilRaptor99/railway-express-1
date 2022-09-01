@@ -29,16 +29,16 @@ export default function AdminLayout({ children }) {
           linkTo="/admin/add-account"
         />,
         <SidebarButton
-          key="{Manage Users}"
-          name="Manage Users"
-          icon={<Person />}
-          linkTo="/admin/manage/users"
-        />,
-        <SidebarButton
           key="{Add Crew Members}"
           name="Add Crew Member"
           icon={<PersonAddAltIcon />}
           linkTo="/admin/add-crew-members"
+        />,
+        <SidebarButton
+          key="{Manage Users}"
+          name="Manage Users"
+          icon={<Person />}
+          linkTo="/admin/manage/department-users"
         />,
       ]}
     >

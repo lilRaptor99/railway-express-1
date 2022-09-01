@@ -2,25 +2,26 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx}'],
   theme: {
-    colors: {
-      slate: {
-        50: '#f8fafc',
-        100: '#f1f5f9',
-        200: '#e2e8f0',
-        300: '#cbd5e1',
-        400: '#94a3b8',
-        500: '#64748b',
-        600: '#475569',
-        700: '#3d4252',
-        800: '#2b3040',
-        900: '#1b1f2f',
-      },
-    },
     fontFamily: {
       sans: ['Roboto', 'sans-serif'],
       serif: ['Playfair Display', 'serif'],
     },
-    extend: {},
+    extend: {
+      colors: {
+        slate: {
+          50: '#f8fafc',
+          100: '#f1f5f9',
+          200: '#e2e8f0',
+          300: '#cbd5e1',
+          400: '#94a3b8',
+          500: '#64748b',
+          600: '#475569',
+          700: '#3d4252',
+          800: '#2b3040',
+          900: '#1b1f2f',
+        },
+      },
+    },
   },
   plugins: [],
 };

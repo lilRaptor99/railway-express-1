@@ -7,8 +7,9 @@ import { ThemeProvider } from '@mui/material/styles';
 import { AuthProvider } from './contexts/authContext';
 import { Route, Routes } from 'react-router-dom';
 import RequireAuth from './utils/RequireAuth';
-import ManageUsers from 'pages/admin/manageUsers/ManageUsers';
+import ManageDepartmentUsers from 'pages/admin/manageUsers/ManageDepartmentUsers';
 import ManageCrewMembers from 'pages/admin/manageUsers/ManageCrewMembers';
+import ManagePassengers from 'pages/admin/manageUsers/ManagePassengers';
 import Statistics from 'pages/admin/Statistics';
 // @ts-ignore
 import TrainLocation from 'pages/controlOfficer/TrainLocation';
@@ -24,6 +25,8 @@ import AllocateCrewMembers from 'pages/controlOfficer/AllocateCrewMembers';
 import ComplaintsSuggestions from 'pages/controlOfficer/ComplaintsSuggessions';
 import SearchTurns from 'pages/controlOfficer/SearchTurns';
 import ComplaintOrSuggestion from 'pages/controlOfficer/complaintsSuggestions/ComplaintOrSuggestion';
+import ProfileUser from 'pages/admin/manageUsers/ProfileUser';
+import ProfileCrewMember from 'pages/admin/manageUsers/ProfileCrewMember';
 
 function App() {
   return (
@@ -44,8 +47,21 @@ function App() {
                 <Route path="add-account" element={<AddAccounts />} />
                 <Route path="add-crew-members" element={<AddCrewMember />} />
                 <Route path="manage">
-                  <Route path="users" element={<ManageUsers />} />
+                  <Route
+                    path="department-users"
+                    element={<ManageDepartmentUsers />}
+                  />
+                  <Route path="department-users">
+                    <Route path="profile/:id" element={<ProfileUser />} />
+                  </Route>
+                  <Route path="passengers" element={<ManagePassengers />} />
+                  <Route path="passengers">
+                    <Route path="profile/:id" element={<ProfileUser />} />
+                  </Route>
                   <Route path="crew-members" element={<ManageCrewMembers />} />
+                  <Route path="crew-members">
+                    <Route path="profile/:id" element={<ProfileCrewMember />} />
+                  </Route>
                 </Route>
               </Route>
               <Route

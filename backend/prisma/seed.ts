@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User, CrewMember } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -16,6 +16,7 @@ const defaultUsers: User[] = [
     stationId: null,
     role: 'ADMIN',
     initialLogIn: false,
+    status: 'ACTIVE',
   },
   {
     userId: '13ab1294-bcf3-4faa-b225-288716f6a490',
@@ -29,6 +30,7 @@ const defaultUsers: User[] = [
     stationId: null,
     role: 'CONTROL_OFFICER',
     initialLogIn: false,
+    status: 'ACTIVE',
   },
   {
     userId: '87815b2d-1eeb-4999-9152-fd0d57b6b0a6',
@@ -42,6 +44,7 @@ const defaultUsers: User[] = [
     stationId: null,
     role: 'TICKETING_OFFICER',
     initialLogIn: false,
+    status: 'ACTIVE',
   },
   {
     userId: 'ce48ccf8-2190-4b11-9317-d221295104b1',
@@ -55,6 +58,7 @@ const defaultUsers: User[] = [
     stationId: null,
     role: 'TICKET_CHECKER',
     initialLogIn: false,
+    status: 'ACTIVE',
   },
   {
     userId: 'de81ded4-4dce-44e9-aefa-5bb8fc537501',
@@ -68,6 +72,21 @@ const defaultUsers: User[] = [
     stationId: null,
     role: 'PASSENGER',
     initialLogIn: false,
+    status: 'ACTIVE',
+  },
+];
+
+const defaultCrewMembers: CrewMember[] = [
+  {
+    userId: '836342ef-5c21-4eeb-a0eb-82c2a2cfb88a',
+    firstName: 'Pratheek',
+    lastName: 'Senevirathne',
+    phoneNumber: '0777483404',
+    nic: '893378644V',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'DRIVER',
+    visibility: 'VISIBLE',
   },
 ];
 
@@ -121,6 +140,41 @@ const defaultStations: any[] = [
     phoneNumber: '',
     location: '6.961454498464568, 79.89469103798747',
   },
+  {
+    stationId: 'PGW',
+    name: 'Polgahawela',
+    address: 'Polgahawela Railway station',
+    phoneNumber: '',
+    location: '7.331758928576164, 80.30120056395806',
+  },
+  {
+    stationId: 'MHO',
+    name: 'Maho',
+    address: 'Maho Railway station',
+    phoneNumber: '',
+    location: '7.823536417059466, 80.27534285647008',
+  },
+  {
+    stationId: 'KKS',
+    name: 'kankesanthurai',
+    address: 'kankesanthurai Railway station',
+    phoneNumber: '',
+    location: '9.815853928994466, 80.04827577963307',
+  },
+  {
+    stationId: 'PDN',
+    name: 'Peradeniya',
+    address: 'Peradeniya Railway station',
+    phoneNumber: '',
+    location: '7.2588149034327145, 80.59020354860766',
+  },
+  {
+    stationId: 'KDY',
+    name: 'Kandy',
+    address: 'Kandy Railway station',
+    phoneNumber: '',
+    location: '7.290755432173376, 80.6322723179272',
+  },
   // {
   //   stationId: 'FOT',
   //   name: 'Fort Railway Station',
@@ -164,7 +218,27 @@ const defaultStationConnections = [
   },
   {
     stationId: 'KLN',
-    adjacentStations: { connect: [{ stationId: 'DMG' }] },
+    adjacentStations: { connect: [{ stationId: 'DMG' }, { stationId: 'PGW' }] },
+  },
+  {
+    stationId: 'PGW',
+    adjacentStations: { connect: [{ stationId: 'KLN' }, { stationId: 'MHO' }] },
+  },
+  {
+    stationId: 'MHO',
+    adjacentStations: { connect: [{ stationId: 'PGW' }, { stationId: 'KKS' }] },
+  },
+  {
+    stationId: 'KKS',
+    adjacentStations: { connect: [{ stationId: 'MHO' }] },
+  },
+  {
+    stationId: 'PDN',
+    adjacentStations: { connect: [{ stationId: 'PGW' }, { stationId: 'KDY' }] },
+  },
+  {
+    stationId: 'KDY',
+    adjacentStations: { connect: [{ stationId: 'PDN' }] },
   },
 ];
 
@@ -241,6 +315,22 @@ function insertUsers() {
   });
 }
 
+function insertCrewMembers() {
+  defaultCrewMembers.forEach(async (crewMemberDetails) => {
+    try {
+      const result = await prisma.crewMember.upsert({
+        where: { nic: crewMemberDetails.nic },
+        update: {},
+        create: crewMemberDetails,
+      });
+
+      console.info('User created: ', result.firstName);
+    } catch {
+      console.error('Error creating user: ', crewMemberDetails.firstName);
+    }
+  });
+}
+
 async function main() {
   // Insert stations synchronously
   await insertStations();
@@ -248,6 +338,8 @@ async function main() {
   addStationRelations();
   // Insert users asynchronously
   insertUsers();
+  // Insert crew members asynchronously
+  insertCrewMembers();
 }
 
 main()

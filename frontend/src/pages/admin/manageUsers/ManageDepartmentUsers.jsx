@@ -2,6 +2,7 @@ import TabLayout from '../../../layout/TabLayout';
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '../../../layout/AdminLayout';
 import Tab from 'components/Tab';
+import SearchBar from 'components/SearchBar';
 import request from 'utils/request';
 import {
   Table,
@@ -13,51 +14,44 @@ import {
   Select,
   CircularProgress,
 } from '@mui/material';
-import SearchBar from 'components/SearchBar';
 import { Link } from 'react-router-dom';
 
 let userDetailsArr = [];
 
-export default function ManageCrewMembers() {
-  const [crewMemberDetails, setCrewMemberDetails] = useState([]);
+export default function ManageDepartmentUsers() {
+  const [userDetails, setUserDetails] = useState([]);
   const [value, setValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    setCrewMemberDetails((preUserDetails) => {
-      return userDetailsArr.filter(
-        (user) => user.occupation === event.target.value
-      );
+    setUserDetails((preUserDetails) => {
+      return userDetailsArr.filter((user) => user.role === event.target.value);
     });
   };
 
   useEffect(() => {
-    getCrewMemberDetails();
+    getUserDetails();
   }, []);
 
-  async function getCrewMemberDetails() {
+  async function getUserDetails() {
     try {
-      const res = await request('get', '/admin/crew-member', {});
+      const res = await request('get', '/admin/user', {});
       userDetailsArr = res.data;
-      setCrewMemberDetails(res.data);
+      setUserDetails(res.data);
       setIsLoading(false);
     } catch (e) {
-      console.error('Get crew member list error:', e);
+      console.error('Get user list error:', e);
     }
   }
 
-  async function searchCrewMember(searchTerm) {
+  async function searchUser(searchTerm) {
     setIsLoading(true);
     console.log(searchTerm);
     try {
-      const res = await request(
-        'get',
-        `/admin/crew-member/search/${searchTerm}`,
-        {}
-      );
+      const res = await request('get', `/admin/user/search/${searchTerm}`, {});
       userDetailsArr = res.data;
-      setCrewMemberDetails(res.data);
+      setUserDetails(res.data);
       setIsLoading(false);
     } catch (e) {
       console.error(e);
@@ -70,15 +64,14 @@ export default function ManageCrewMembers() {
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
+            <TableCell>Email</TableCell>
             <TableCell>Phone No</TableCell>
             <TableCell>NIC</TableCell>
-            <TableCell>Address</TableCell>
-            <TableCell>Occupation</TableCell>
-            <TableCell>Station</TableCell>
+            <TableCell>Role</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {crewMemberDetails.map((user) => (
+          {userDetails.map((user) => (
             <TableRow
               key={user.userId}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -86,18 +79,16 @@ export default function ManageCrewMembers() {
               <TableCell className="hidden">{user.userId}</TableCell>
               <TableCell>
                 <Link
-                  color="#065b8d"
                   to={`profile/${user.userId}`}
                   className="no-underline my-0 text-slate-500 hover:underline"
                 >
                   {user.firstName} {user.lastName}
                 </Link>
               </TableCell>
+              <TableCell>{user.email}</TableCell>
               <TableCell>{user.phoneNumber}</TableCell>
               <TableCell>{user.nic}</TableCell>
-              <TableCell>{user.address}</TableCell>
-              <TableCell>{user.occupation}</TableCell>
-              <TableCell>{user.stationId}</TableCell>
+              <TableCell>{user.role}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -127,7 +118,7 @@ export default function ManageCrewMembers() {
         ]}
       >
         <div className="flex flex-row flex-wrap">
-          <SearchBar handleSearch={searchCrewMember} />
+          <SearchBar handleSearch={searchUser} />
           <div className="w-40">
             <Select
               labelId="select"
@@ -136,10 +127,9 @@ export default function ManageCrewMembers() {
               onChange={handleChange}
               className="ml-10 h-14 my-4 min-w-full rounded-2xl"
             >
-              <MenuItem value="DRIVER">Driver</MenuItem>
-              <MenuItem value="DRIVER_ASSISTANT">Driver Assistant</MenuItem>
-              <MenuItem value="HEAD_GUARD">Head Guard</MenuItem>
-              <MenuItem value="UNDER_GUARD">Under Guard</MenuItem>
+              <MenuItem value="CONTROL_OFFICER">Control Officer</MenuItem>
+              <MenuItem value="TICKETING_OFFICER">Ticketing Officer</MenuItem>
+              <MenuItem value="TICKET_CHECKER">Ticket Checker</MenuItem>
             </Select>
           </div>
         </div>
