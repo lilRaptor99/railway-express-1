@@ -17,6 +17,7 @@ import {
   getreasonToBlockUser,
   deleteCrewMember,
   setReasonToBlockUser,
+  AddPriceList,
 } from '../services/admin.service';
 
 const router = Router();
@@ -46,6 +47,27 @@ router.post(
     try {
       const crewMember = await AddCrewMembers(req.body as CrewMember);
       res.json(crewMember);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Add ticket price list
+
+router.post(
+  '/addPriceList',
+  async (req: Request, res: Response, next: NextFunction) => {
+    // @ts-ignore
+    if (!req.files || Object.keys(req.files).length === 0) {
+      res.status(400).send('No files were uploaded.');
+      return;
+    }
+
+    try {
+      // @ts-ignore
+      const priceList = await AddPriceList(req.files.file);
+      res.json(priceList);
     } catch (error) {
       next(error);
     }

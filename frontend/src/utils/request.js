@@ -6,8 +6,6 @@ export default async function request(method = 'get', endpoint, data = null) {
 
   const currentUser = item ? JSON.parse(item) : null;
 
-  console.log('Base url: ', baseUrl);
-
   try {
     return await axios.request({
       method,
@@ -20,4 +18,15 @@ export default async function request(method = 'get', endpoint, data = null) {
     console.error('Request error: ', e);
     throw e;
   }
+}
+
+export async function postFormData(endpoint, formData) {
+  const item = window?.localStorage?.getItem('currentUser');
+  const currentUser = item ? JSON.parse(item) : null;
+  return await axios.post(`${baseUrl}${endpoint}`, formData, {
+    headers: {
+      Authorization: `Token ${(await currentUser)?.token}`,
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }

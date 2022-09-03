@@ -1,5 +1,8 @@
 import { CrewMember, ReasonToBlock } from '@prisma/client';
+import { parse } from 'papaparse';
+
 import prisma from '../../prisma/prisma-client';
+import HttpException from '../models/http-exception.model';
 
 export async function AddCrewMembers(input: CrewMember) {
   const crewMember = (await prisma.crewMember.create({
@@ -15,6 +18,24 @@ export async function AddCrewMembers(input: CrewMember) {
     ...input,
     ...crewMember,
   };
+}
+
+export async function AddPriceList(input: any) {
+  const result = parse(input.data.toString('utf8'));
+  // @ts-ignore
+  const list = [...result.data[0]].sort();
+  const list2 = [...list].slice(1);
+  const stationList = await prisma.station.findMany({
+    select: { stationId: true },
+  });
+  const stationIdList = stationList.map((station) => station.stationId);
+  const stationIdlist2 = stationIdList.sort();
+  if (JSON.stringify(list2) === JSON.stringify(stationIdlist2)) {
+    const uploadPath = `${__dirname}/../../ticket_prices/${input.name}`;
+    input.mv(uploadPath);
+  } else {
+    throw new HttpException(422, { errors: ['File format does not match'] });
+  }
 }
 
 export async function getUserDetails() {

@@ -1,8 +1,9 @@
+import React from 'react';
 import { Button as MuiButton } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-export default function Button({ isLoading, ...props }) {
+export default function Button({ isLoading = false, ...props }) {
   // Loading button
   if (isLoading) {
     return (

@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import routes from './routes/routes';
 import HttpException from './models/http-exception.model';
 
+const fileUpload = require('express-fileupload');
+
 const app = express();
 
 /**
@@ -15,6 +17,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 app.use(routes);
 
 // Serves static files
@@ -76,3 +79,6 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
     console.info(`server up on port ${PORT}`);
   });
 }
+// function fileUpload(): any {
+//   throw new Error('Function not implemented.');
+// }
