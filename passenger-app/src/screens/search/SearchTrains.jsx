@@ -19,7 +19,7 @@ export default function SearchTrains({ navigation }) {
   const [allStations, setAllStations] = useState([]);
 
   setTimeout(() => {
-    navigation.navigate('My Tickets');
+    navigation.navigate('Complaints and Suggestions');
   }, 100);
 
   useEffect(() => {

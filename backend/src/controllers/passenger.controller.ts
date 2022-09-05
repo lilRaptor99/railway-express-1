@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { User } from '../models/user.model';
-import { updateProfile } from '../services/passenger.service';
+import { addComplaint, updateProfile } from '../services/passenger.service';
 
 const router = Router();
 
@@ -21,6 +21,20 @@ router.post(
       } else {
         res.json({ status: 'unsuccess' });
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Add complaint or suggestion
+router.post(
+  '/complaint',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const complaint = req.body;
+      // @ts-ignore
+      res.json(await addComplaint(complaint, req.auth));
     } catch (error) {
       next(error);
     }

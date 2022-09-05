@@ -25,6 +25,7 @@ import BuyTickets from './src/screens/buyTickets/BuyTickets';
 import ReserveSeats from './src/screens/reserveSeats/ReserveSeats';
 import MyProfile from './src/screens/myProfile/MyProfile';
 import { useEffect, useState } from 'react';
+import ComplaintsAndSuggestions from './src/screens/complaintsSuggestions/ComplaintsAndSuggestions';
 
 export const Stack = createNativeStackNavigator();
 export const Drawer = createDrawerNavigator();
@@ -140,6 +141,22 @@ function BuyTicketsNavigators() {
     </Stack.Navigator>
   );
 }
+function ComplaintsAndSuggestionsNavigators() {
+  return (
+    <Stack.Navigator
+      initialRouteName="ComplaintsAndSuggestions"
+      screenOptions={{
+        header: (props) => <CustomNavigationBar {...props} />,
+      }}
+    >
+      <Stack.Screen
+        name="ComplaintsAndSuggestions"
+        component={ComplaintsAndSuggestions}
+        initialParams={{ screenTitle: 'Complaints and Suggestions' }}
+      />
+    </Stack.Navigator>
+  );
+}
 function ReserveSeatsNavigators() {
   return (
     <Stack.Navigator
@@ -197,6 +214,11 @@ export default function App() {
             component={MyProfileNavigators}
             options={drawerScreenOptions({ icon: 'card-account-details' })}
           />
+          <Drawer.Screen
+            name="Complaints and Suggestions"
+            component={ComplaintsAndSuggestionsNavigators}
+            options={drawerScreenOptions({ icon: 'message-processing' })}
+          />
         </>
       );
     } else return null;
@@ -253,11 +275,7 @@ export default function App() {
               component={ReserveSeatsNavigators}
               options={drawerScreenOptions({ icon: 'seat-recline-extra' })}
             />
-            <Drawer.Screen
-              name="My Tickets"
-              component={MyTicketsNavigators}
-              options={drawerScreenOptions({ icon: 'barcode' })}
-            />
+
             {getUserScreens()}
 
             <Drawer.Screen
