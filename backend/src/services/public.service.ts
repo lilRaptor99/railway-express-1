@@ -1,6 +1,9 @@
 import { Station } from '@prisma/client';
 import nodemailer from 'nodemailer';
+import { parse } from 'papaparse';
 import prisma from '../../prisma/prisma-client';
+
+const fs = require('fs');
 
 export async function addStation(station: Station) {
   await prisma.station.create({
@@ -61,4 +64,31 @@ export async function verifyEmail(
   console.info('Message sent: %s', info.messageId);
 
   return verifyKey;
+}
+
+export async function getTicketPrice(
+  ticketType: String,
+  ticketClass: String,
+  to: String,
+  from: String
+) {
+  const filePath = `${__dirname}/../../ticket_prices/${ticketType.toUpperCase()}-${ticketClass.toUpperCase()}.csv`;
+  const data = fs.readFileSync(filePath, 'utf8');
+  const priceList = parse(data);
+  const startList: any = priceList.data.slice(1, 8);
+  const destinationList = priceList.data[0];
+  // @ts-ignore
+  const endIndex = destinationList.indexOf(from);
+
+  const startlength = startList.length;
+
+  let ticketPrice;
+
+  for (let i = 0; i < startlength; i += 1) {
+    if (startList[i][0] === to) {
+      ticketPrice = startList[i][endIndex];
+    }
+  }
+
+  return ticketPrice;
 }

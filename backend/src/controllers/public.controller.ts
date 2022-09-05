@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import { getStations, verifyEmail } from '../services/public.service';
+import {
+  getStations,
+  getTicketPrice,
+  verifyEmail,
+} from '../services/public.service';
 
 const router = Router();
 
@@ -37,3 +41,23 @@ router.post(
   }
 );
 export default router;
+
+/**
+ * Get ticket prices
+ */
+router.get(
+  '/ticket-prices/:ticketType/:ticketClass/',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const price = await getTicketPrice(
+        req.params.ticketType,
+        req.params.ticketClass,
+        req.body.from,
+        req.body.to
+      );
+      res.json(price);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
