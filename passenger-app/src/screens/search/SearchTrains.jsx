@@ -18,9 +18,9 @@ export default function SearchTrains({ navigation }) {
 
   const [allStations, setAllStations] = useState([]);
 
-  setTimeout(() => {
-    navigation.navigate('Complaints and Suggestions');
-  }, 100);
+  // setTimeout(() => {
+  //   navigation.navigate('AuthNavigators');
+  // }, 100);
 
   useEffect(() => {
     request('get', '/public/stations')

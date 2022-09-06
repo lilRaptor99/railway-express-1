@@ -2,6 +2,9 @@ import { NextFunction, Request, Response, Router } from 'express';
 import {
   getStations,
   getTicketPrice,
+  forgotPassword,
+  getStations,
+  resetPasswordUsingKey,
   verifyEmail,
 } from '../services/public.service';
 
@@ -40,6 +43,37 @@ router.post(
     }
   }
 );
+
+// Forgot password
+router.post(
+  '/forgot-password',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const verifyKey = await forgotPassword(req.body.email);
+      res.json({ status: 'success', verifyKey });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Forgot password
+router.post(
+  '/reset-password-using-key',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await resetPasswordUsingKey(
+        req.body.verifyKey,
+        req.body.email,
+        req.body.newPassword
+      );
+      res.json({ status: 'success' });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default router;
 
 /**

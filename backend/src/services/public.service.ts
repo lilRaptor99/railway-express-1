@@ -1,7 +1,10 @@
+import bcrypt from 'bcryptjs';
 import { Station } from '@prisma/client';
 import nodemailer from 'nodemailer';
 import { parse } from 'papaparse';
 import prisma from '../../prisma/prisma-client';
+import HttpException from '../models/http-exception.model';
+import { generateVerifyKey } from '../utils/math-utils';
 import sendMail from '../utils/send-mail';
 
 const fs = require('fs');
@@ -21,10 +24,7 @@ export async function verifyEmail(
   firstName: string,
   lastName: string
 ) {
-  let verifyKey = 0;
-  while (verifyKey < 999 || verifyKey > 9999) {
-    verifyKey = Math.floor(Math.random() * 10000);
-  }
+  const verifyKey = generateVerifyKey();
 
   const info = await sendMail(
     {
@@ -71,4 +71,59 @@ export async function getTicketPrice(
   }
 
   return ticketPrice;
+}
+
+export async function forgotPassword(email: string) {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user) {
+    throw new HttpException(400, { errors: ['User account not found!'] });
+  }
+
+  const verifyKey = generateVerifyKey();
+
+  const info = await sendMail(
+    {
+      email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
+    'Forgot password',
+    /* HTML */
+    `<p>
+      Please use <b>${verifyKey}</b> as the email verification code to reset
+      your password.
+    </p>`
+  );
+  console.info('Verification code for ', email, '  : ', verifyKey);
+
+  console.info('Message sent: %s', info.messageId);
+
+  return verifyKey;
+}
+
+export async function resetPasswordUsingKey(
+  verifyKey: string,
+  email: string,
+  newPassword: string
+) {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!newPassword) {
+    throw new HttpException(422, { errors: ["New Password can't be blank"] });
+  }
+  if (!user) {
+    throw new HttpException(400, { errors: ['User account not found!'] });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: {
+      userId: user.userId,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
 }

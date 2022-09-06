@@ -117,6 +117,8 @@ export default function ComplaintsAndSuggestions({ navigation }) {
                   <Button
                     mode="contained"
                     onPress={formik.handleSubmit}
+                    disabled={!formik.isValid || formik.isSubmitting}
+                    loading={formik.isSubmitting}
                     className="mt-4"
                   >
                     Submit

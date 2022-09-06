@@ -26,6 +26,7 @@ import ReserveSeats from './src/screens/reserveSeats/ReserveSeats';
 import MyProfile from './src/screens/myProfile/MyProfile';
 import { useEffect, useState } from 'react';
 import ComplaintsAndSuggestions from './src/screens/complaintsSuggestions/ComplaintsAndSuggestions';
+import ForgotPasswordResetPage from './src/screens/auth/ForgotPasswordResetPage';
 
 export const Stack = createNativeStackNavigator();
 export const Drawer = createDrawerNavigator();
@@ -104,22 +105,27 @@ function AuthNavigators() {
       <Stack.Screen
         name="Login"
         component={Login}
-        initialParams={{ screenTitle: 'Login - Railway Express' }}
+        initialParams={{ screenTitle: 'Login' }}
       />
       <Stack.Screen
         name="Register"
         component={Register}
-        initialParams={{ screenTitle: 'Register - Railway Express' }}
+        initialParams={{ screenTitle: 'Register' }}
       />
       <Stack.Screen
         name="ForgotPassword"
         component={ForgotPassword}
-        initialParams={{ screenTitle: 'Reset Password - Railway Express' }}
+        initialParams={{ screenTitle: 'Reset Password' }}
+      />
+      <Stack.Screen
+        name="ForgotPasswordResetPage"
+        component={ForgotPasswordResetPage}
+        initialParams={{ screenTitle: 'Reset Password' }}
       />
       <Stack.Screen
         name="VerifyEmail"
         component={VerifyEmail}
-        initialParams={{ screenTitle: 'Verify Email - Railway Express' }}
+        initialParams={{ screenTitle: 'Verify Email' }}
       />
     </Stack.Navigator>
   );
