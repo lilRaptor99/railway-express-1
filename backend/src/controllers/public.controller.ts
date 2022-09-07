@@ -3,7 +3,6 @@ import {
   getStations,
   getTicketPrice,
   forgotPassword,
-  getStations,
   resetPasswordUsingKey,
   verifyEmail,
 } from '../services/public.service';

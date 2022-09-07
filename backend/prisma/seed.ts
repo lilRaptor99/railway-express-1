@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { PrismaClient, User, CrewMember } from '@prisma/client';
+import { CrewMember, PrismaClient, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -166,11 +166,6 @@ const defaultCrewMembers: CrewMember[] = [
     visibility: 'VISIBLE',
   },
 ];
-
-// const graph = {
-//   FOT: ['MRD', 'KLL'],
-//   MRD: ['FOT', 'DMT', 'BSL']
-// }
 
 const defaultStations: any[] = [
   {

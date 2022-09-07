@@ -18,9 +18,9 @@ export default function SearchTrains({ navigation }) {
 
   const [allStations, setAllStations] = useState([]);
 
-  // setTimeout(() => {
-  //   navigation.navigate('AuthNavigators');
-  // }, 100);
+  setTimeout(() => {
+    navigation.navigate('Buy Tickets');
+  }, 100);
 
   useEffect(() => {
     request('get', '/public/stations')
@@ -96,7 +96,7 @@ export default function SearchTrains({ navigation }) {
               itemsArray={allStations}
             />
 
-            <Button mode="contained" className="mt-4" onPress={handleSubmit}>
+            <Button mode="contained" className="mt-6" onPress={handleSubmit}>
               Search
             </Button>
           </>

@@ -8,6 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
+import TextInput from './TextInput';
 
 export default function Autocomplete({
   itemsArray,
@@ -43,7 +44,14 @@ export default function Autocomplete({
           }
           value={query}
           onChangeText={setQuery}
-          placeholder={placeholderText}
+          renderTextInput={(props) => (
+            <TextInput
+              errorText={''}
+              {...props}
+              style={{ backgroundColor: '#F4F4F6' }}
+              label={placeholder}
+            />
+          )}
           flatListProps={{
             keyboardShouldPersistTaps: 'always',
             keyExtractor: (station) => station,
@@ -77,7 +85,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
       },
       default: {
-        marginTop: 15,
+        marginTop: 10,
         marginBottom: 10,
       },
     }),
@@ -90,25 +98,28 @@ const styles = StyleSheet.create({
     flex: 1,
     left: 0,
     position: 'absolute',
+    backgroundColor: '#F4F4F6',
     right: 0,
     top: 0,
     zIndex: 1,
-    padding: 5,
+    padding: 0,
   },
   inputContainer: {
-    borderRadius: 14,
+    borderRadius: 0,
+    borderWidth: 0,
+    margin: 0,
     overflow: 'hidden',
-    padding: 10,
+    backgroundColor: '#F4F4F6',
+    padding: 0,
     zIndex: 80,
-    backgroundColor: 'white',
   },
   listContainer: {
+    backgroundColor: '#F4F4F6',
     position: 'absolute',
     width: '100%',
     bottom: '105%',
     borderRadius: 12,
     elevation: 10,
-    backgroundColor: 'white',
     overflow: 'hidden',
   },
 });

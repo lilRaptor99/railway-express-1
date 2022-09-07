@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { Station } from '@prisma/client';
-import nodemailer from 'nodemailer';
 import { parse } from 'papaparse';
 import prisma from '../../prisma/prisma-client';
 import HttpException from '../models/http-exception.model';
