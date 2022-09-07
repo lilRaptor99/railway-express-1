@@ -41,15 +41,16 @@ enum Status {
 }
 
 model Station {
-  stationId    String       @id
-  name         String
-  address      String
-  phoneNumber  String
-  location     String
-  adjacentTo   Station[]    @relation("AdjacentStations")
-  adjacentFrom Station[]    @relation("AdjacentStations")
-  User         User[]
-  CrewMember   CrewMember[]
+  stationId           String                @id
+  name                String
+  address             String
+  phoneNumber         String
+  location            String
+  adjacentTo          Station[]             @relation("AdjacentStations")
+  adjacentFrom        Station[]             @relation("AdjacentStations")
+  User                User[]
+  CrewMember          CrewMember[]
+  IntermediateStation IntermediateStation[]
 }
 
 model CrewMember {
@@ -81,4 +82,56 @@ model ReasonToBlock {
   userId String @id
   user   User   @relation(fields: [userId], references: [userId])
   reason String
+}
+
+model TrainTurn {
+  turnNumber           Int                   @id
+  turnName             String
+  reservable           Boolean
+  availability         TrainTurnAvailability @default(DAILY)
+  type                 TrainTurnType         @default(SLOW)
+  intermediateStations IntermediateStation[]
+  trainCompartments    TrainCompartment[]
+}
+
+model TrainCompartment {
+  trainTurn         TrainTurn             @relation(fields: [turnNumber], references: [turnNumber])
+  turnNumber        Int
+  compartmentNumber String
+  seatCount         Int
+  class             TrainReservationClass @default(THIRD_CLASS)
+
+  @@id([turnNumber, compartmentNumber])
+}
+
+model IntermediateStation {
+  stationId     String
+  station       Station   @relation(fields: [stationId], references: [stationId])
+  arrivalTime   String?
+  departureTime String?
+  isStart       Boolean
+  isEnd         Boolean
+  trainTurn     TrainTurn @relation(fields: [turnNumber], references: [turnNumber])
+  turnNumber    Int
+
+  @@id([turnNumber, stationId])
+}
+
+enum TrainTurnAvailability {
+  SO
+  NS
+  NSU
+  DAILY
+}
+
+enum TrainTurnType {
+  SLOW
+  EXPRESS
+  INTERCITY
+}
+
+enum TrainReservationClass {
+  FIRST_CLASS
+  SECOND_CLASS
+  THIRD_CLASS
 }

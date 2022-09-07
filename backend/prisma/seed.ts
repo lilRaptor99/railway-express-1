@@ -88,6 +88,83 @@ const defaultCrewMembers: CrewMember[] = [
     occupation: 'DRIVER',
     visibility: 'VISIBLE',
   },
+  {
+    userId: '0e80d481-0dcc-4112-ba27-cd20f46eb375',
+    firstName: 'Pramudi',
+    lastName: 'Vihanga',
+    phoneNumber: '0777854961',
+    nic: '652398547v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'DRIVER_ASSISTANT',
+    visibility: 'VISIBLE',
+  },
+  {
+    userId: '235dd8ff-259a-45b6-81ce-88a1883ce93a',
+    firstName: 'Lasanthi',
+    lastName: 'Wathsala',
+    phoneNumber: '0712543698',
+    nic: '748596321v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'HEAD_GUARD',
+    visibility: 'VISIBLE',
+  },
+  {
+    userId: '0768d16a-afda-45f5-bd55-9f237e0d0748',
+    firstName: 'Sathya',
+    lastName: 'Wijesooriya',
+    phoneNumber: '0712548965',
+    nic: '785263941v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'UNDER_GUARD',
+    visibility: 'VISIBLE',
+  },
+  {
+    userId: '65a10174-287d-4bdc-9dbf-c5b90d043af5',
+    firstName: 'Sahani',
+    lastName: 'Silva',
+    phoneNumber: '0705128964',
+    nic: '702548963v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'DRIVER',
+    visibility: 'VISIBLE',
+  },
+  {
+    userId: 'e125187f-6e6a-4d02-bfd8-34386141fd6c',
+    firstName: 'Tharindu',
+    lastName: 'Thathsara',
+    phoneNumber: '0725896452',
+    nic: '802569321v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'DRIVER_ASSISTANT',
+    visibility: 'VISIBLE',
+  },
+  {
+    userId: 'f8696448-bf99-450f-88a8-7c123030927f',
+    firstName: 'Pudara',
+    lastName: 'Semini',
+    phoneNumber: '0775896458',
+    nic: '792514863v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'HEAD_GUARD',
+    visibility: 'VISIBLE',
+  },
+  {
+    userId: 'cbc3af3d-3120-4614-915d-23dabd1ae3ce',
+    firstName: 'Tharaki',
+    lastName: 'Dilshani',
+    phoneNumber: '0774859621',
+    nic: '775896485v',
+    address: '200/4B, Some Lane, Some Road, COlombo.',
+    stationId: 'FOT',
+    occupation: 'UNDER_GUARD',
+    visibility: 'VISIBLE',
+  },
 ];
 
 const defaultStations: any[] = [
@@ -324,9 +401,12 @@ function insertCrewMembers() {
         create: crewMemberDetails,
       });
 
-      console.info('User created: ', result.firstName);
+      console.info('Crew member created: ', result.firstName);
     } catch {
-      console.error('Error creating user: ', crewMemberDetails.firstName);
+      console.error(
+        'Error creating crew member: ',
+        crewMemberDetails.firstName
+      );
     }
   });
 }
