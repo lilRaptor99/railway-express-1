@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 
-import { View, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Formik } from 'formik';
+import { KeyboardAvoidingView, ScrollView, Text, View } from 'react-native';
 import { Button, RadioButton, Snackbar, Switch } from 'react-native-paper';
 import { theme } from '../../../reactNativePaperTheme';
 import Autocomplete from '../../components/Autocomplete';
-import request from '../../utils/request';
-import { Formik } from 'formik';
 import TextInput from '../../components/TextInput';
+import request from '../../utils/request';
 
 let fromStation = null;
 let toStation = null;
+let previousSelectedStations = [null, null];
 let stationData = null;
+let unitPrice = 0;
 
 export default function BuyTickets({ navigation }) {
   const [loginError, setLoginError] = useState(null);
-
   const [allStations, setAllStations] = useState([]);
-  const [price, setPrice] = useState(100.0);
+  const [price, setPrice] = useState(0);
 
+  const formikRef = useRef(null);
+
+  // Fetch stations
   useEffect(() => {
     request('get', '/public/stations')
       .then((res) => {
@@ -26,6 +30,45 @@ export default function BuyTickets({ navigation }) {
         setAllStations(res.data.map((stationObj) => stationObj.name));
       })
       .catch((e) => setLoginError('Error Loading station data!'));
+  }, []);
+
+  // Fetch ticket prices
+  useEffect(() => {
+    const updatePriceInterval = setInterval(() => {
+      (async () => {
+        if (
+          fromStation !== previousSelectedStations[0] ||
+          toStation !== previousSelectedStations[1]
+        ) {
+          previousSelectedStations = [fromStation, toStation];
+          const from = stationData.filter(
+            (stationObj) => stationObj.name === fromStation
+          )[0].stationId;
+          const to = stationData.filter(
+            (stationObj) => stationObj.name === toStation
+          )[0].stationId;
+
+          try {
+            const res = await request(
+              'post',
+              `/public/ticket-prices/NORMAL/${formikRef.current.values.ticketClass}`,
+              { from, to }
+            );
+            unitPrice = Number.parseFloat(res.data.price);
+          } catch (e) {
+            console.log('Request Error: ', e);
+          }
+        }
+        if (formikRef?.current?.values) {
+          setPrice(
+            formikRef.current?.values.return
+              ? unitPrice * parseInt(formikRef.current?.values.noOfTickets) * 2
+              : unitPrice * parseInt(formikRef.current?.values.noOfTickets)
+          );
+        }
+      })();
+    }, 500);
+    return () => clearInterval(updatePriceInterval);
   }, []);
 
   async function handleSubmit(values, { setSubmitting }) {
@@ -49,6 +92,8 @@ export default function BuyTickets({ navigation }) {
 
     const submitValues = { ...values, from, to };
     console.log('Values: ', submitValues);
+
+    navigation.navigate('TicketPayment');
   }
 
   return (
@@ -69,6 +114,7 @@ export default function BuyTickets({ navigation }) {
           </Text>
           <View className="flex-1 px-8">
             <Formik
+              innerRef={formikRef}
               validationSchema={yup.object().shape({
                 email: yup.string().email('Please enter valid email'),
                 noOfTickets: yup.number().required('Required!'),
@@ -158,11 +204,7 @@ export default function BuyTickets({ navigation }) {
                   <View className="flex-1 flex-row items-center">
                     <Text className="text-base">Price</Text>
                     <View className="pl-5">
-                      <TextInput
-                        value={'LKR ' + price.toPrecision(5)}
-                        errorText=""
-                        disabled
-                      />
+                      <TextInput value={`LKR ${price}`} errorText="" disabled />
                     </View>
                   </View>
 

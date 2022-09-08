@@ -1,32 +1,34 @@
-import 'react-native-gesture-handler';
-import * as React from 'react';
-import { theme } from './reactNativePaperTheme';
-import { TailwindProvider } from 'tailwindcss-react-native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import * as React from 'react';
+import 'react-native-gesture-handler';
 import { IconButton, Provider as PaperProvider } from 'react-native-paper';
-import { AuthProvider, useAuth } from './src/contexts/authContext';
+import { TailwindProvider } from 'tailwindcss-react-native';
+import { theme } from './reactNativePaperTheme';
+import { useAuth } from './src/contexts/authContext';
 
 import CustomDrawer from './src/components/CustomDrawer';
 import CustomNavigationBar from './src/components/CustomNavigationBar';
 
-import SearchTrains from './src/screens/search/SearchTrains';
-import SearchResults from './src/screens/search/SearchResults';
-import SearchTimeTable from './src/screens/timeTables/SearchTimeTable';
-import StationSchedule from './src/screens/timeTables/StationSchedule';
+import { useEffect, useState } from 'react';
+import ForgotPassword from './src/screens/auth/ForgotPassword';
+import ForgotPasswordResetPage from './src/screens/auth/ForgotPasswordResetPage';
 import Login from './src/screens/auth/Login';
 import Register from './src/screens/auth/Register';
-import ForgotPassword from './src/screens/auth/ForgotPassword';
-import TrainDetails from './src/screens/search/TrainDetails';
 import VerifyEmail from './src/screens/auth/VerifyEmail';
-import MyTickets from './src/screens/tickets/MyTickets';
 import BuyTickets from './src/screens/buyTickets/BuyTickets';
-import ReserveSeats from './src/screens/reserveSeats/ReserveSeats';
-import MyProfile from './src/screens/myProfile/MyProfile';
-import { useEffect, useState } from 'react';
+import DownloadTicket from './src/screens/buyTickets/DownloadTicket';
+import TicketPayment from './src/screens/buyTickets/TicketPayment';
 import ComplaintsAndSuggestions from './src/screens/complaintsSuggestions/ComplaintsAndSuggestions';
-import ForgotPasswordResetPage from './src/screens/auth/ForgotPasswordResetPage';
+import MyProfile from './src/screens/myProfile/MyProfile';
+import ReserveSeats from './src/screens/reserveSeats/ReserveSeats';
+import SearchResults from './src/screens/search/SearchResults';
+import SearchTrains from './src/screens/search/SearchTrains';
+import TrainDetails from './src/screens/search/TrainDetails';
+import MyTickets from './src/screens/tickets/MyTickets';
+import SearchTimeTable from './src/screens/timeTables/SearchTimeTable';
+import StationSchedule from './src/screens/timeTables/StationSchedule';
 
 export const Stack = createNativeStackNavigator();
 export const Drawer = createDrawerNavigator();
@@ -143,6 +145,16 @@ function BuyTicketsNavigators() {
         name="BuyTickets"
         component={BuyTickets}
         initialParams={{ screenTitle: 'Buy Tickets' }}
+      />
+      <Stack.Screen
+        name="TicketPayment"
+        component={TicketPayment}
+        initialParams={{ screenTitle: 'Ticket Payment' }}
+      />
+      <Stack.Screen
+        name="DownloadTicket"
+        component={DownloadTicket}
+        initialParams={{ screenTitle: 'Download Ticket' }}
       />
     </Stack.Navigator>
   );

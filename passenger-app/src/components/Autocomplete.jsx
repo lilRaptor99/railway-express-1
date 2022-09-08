@@ -1,12 +1,6 @@
+import React, { useState } from 'react';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import AutocompleteInput from 'react-native-autocomplete-input';
-import React, { FC, useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  Platform,
-} from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import TextInput from './TextInput';
 
@@ -53,6 +47,8 @@ export default function Autocomplete({
             />
           )}
           flatListProps={{
+            // scrollEnabled: true,
+            // horizontal: true,
             keyboardShouldPersistTaps: 'always',
             keyExtractor: (station) => station,
             renderItem: ({ item }) => (

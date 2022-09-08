@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
   createNormalTicket,
+  forgotPassword,
   getStations,
   getTicketPrice,
-  forgotPassword,
   resetPasswordUsingKey,
   verifyEmail,
 } from '../services/public.service';
@@ -74,13 +74,11 @@ router.post(
   }
 );
 
-export default router;
-
 /**
  * Get ticket prices
  */
 router.post(
-  '/ticket-prices/:ticketType/:ticketClass/',
+  '/ticket-prices/:ticketType/:ticketClass',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const price = await getTicketPrice(
@@ -114,3 +112,5 @@ router.post(
     }
   }
 );
+
+export default router;
