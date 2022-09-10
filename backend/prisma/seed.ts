@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { CrewMember, PrismaClient, User } from '@prisma/client';
+import { PrismaClient, User, CrewMember } from '@prisma/client';
+import { TrainTurnInput } from '../src/models/train-turn-input.model';
 
 const prisma = new PrismaClient();
 
@@ -319,6 +320,184 @@ const defaultStationConnections = [
   },
 ];
 
+const defaultTrainTurns: TrainTurnInput[] = [
+  {
+    turnNumber: 4003,
+    turnName: 'Yal Devi',
+    reservable: true,
+    availability: 'DAILY',
+    type: 'INTERCITY',
+    intermediateStations: [
+      {
+        arrivalTime: '',
+        departureTime: '12:02',
+        isStart: true,
+        isEnd: false,
+        stationId: 'FOT',
+      },
+      {
+        arrivalTime: '12:07',
+        departureTime: '12:10',
+        isStart: false,
+        isEnd: false,
+        stationId: 'MDA',
+      },
+      {
+        arrivalTime: '',
+        departureTime: '17:10',
+        isStart: false,
+        isEnd: true,
+        stationId: 'KKS',
+      },
+    ],
+    trainCompartments: [
+      {
+        compartmentNumber: 'A',
+        seatCount: 55,
+        class: 'FIRST_CLASS',
+      },
+      {
+        compartmentNumber: 'B',
+        seatCount: 55,
+        class: 'FIRST_CLASS',
+      },
+      {
+        compartmentNumber: 'C',
+        seatCount: 55,
+        class: 'FIRST_CLASS',
+      },
+    ],
+  },
+  {
+    turnNumber: 1029,
+    turnName: '',
+    reservable: true,
+    availability: 'DAILY',
+    type: 'INTERCITY',
+    intermediateStations: [
+      {
+        arrivalTime: '',
+        departureTime: '15:35',
+        isStart: true,
+        isEnd: false,
+        stationId: 'FOT',
+      },
+      {
+        arrivalTime: '17:43',
+        departureTime: '17:45',
+        isStart: false,
+        isEnd: false,
+        stationId: 'PDN',
+      },
+      {
+        arrivalTime: '18:00',
+        departureTime: '',
+        isStart: false,
+        isEnd: true,
+        stationId: 'KDY',
+      },
+    ],
+    trainCompartments: [
+      {
+        compartmentNumber: 'A',
+        seatCount: 50,
+        class: 'FIRST_CLASS',
+      },
+      {
+        compartmentNumber: 'B',
+        seatCount: 50,
+        class: 'FIRST_CLASS',
+      },
+      {
+        compartmentNumber: 'C',
+        seatCount: 50,
+        class: 'SECOND_CLASS',
+      },
+    ],
+  },
+  {
+    turnNumber: 1007,
+    turnName: 'Udarata Menike',
+    reservable: true,
+    availability: 'DAILY',
+    type: 'INTERCITY',
+    intermediateStations: [
+      {
+        arrivalTime: '',
+        departureTime: '08:35',
+        isStart: true,
+        isEnd: false,
+        stationId: 'FOT',
+      },
+      {
+        arrivalTime: '09:49',
+        departureTime: '09:54',
+        isStart: false,
+        isEnd: false,
+        stationId: 'PGW',
+      },
+      {
+        arrivalTime: '10:54',
+        departureTime: '10:58',
+        isStart: false,
+        isEnd: false,
+        stationId: 'PDN',
+      },
+      {
+        arrivalTime: '',
+        departureTime: '11:15',
+        isStart: false,
+        isEnd: true,
+        stationId: 'KDY',
+      },
+    ],
+    trainCompartments: [
+      {
+        compartmentNumber: 'A',
+        seatCount: 50,
+        class: 'FIRST_CLASS',
+      },
+      {
+        compartmentNumber: 'B',
+        seatCount: 50,
+        class: 'FIRST_CLASS',
+      },
+      {
+        compartmentNumber: 'C',
+        seatCount: 50,
+        class: 'FIRST_CLASS',
+      },
+    ],
+  },
+  {
+    turnNumber: 4468,
+    turnName: '',
+    reservable: false,
+    availability: 'DAILY',
+    type: 'SLOW',
+    intermediateStations: [],
+    trainCompartments: [],
+  },
+  {
+    turnNumber: 4086,
+    turnName: '',
+    reservable: false,
+    availability: 'DAILY',
+    type: 'EXPRESS',
+    intermediateStations: [],
+    trainCompartments: [],
+  },
+  {
+    turnNumber: 1035,
+    turnName: '',
+    reservable: false,
+    availability: 'NSU',
+    type: 'SLOW',
+    intermediateStations: [],
+    trainCompartments: [],
+  },
+];
+
 // Insert stations synchronously
 function insertStations() {
   // eslint-disable-next-line guard-for-in, no-restricted-syntax
@@ -411,6 +590,39 @@ function insertCrewMembers() {
   });
 }
 
+// Insert stations synchronously
+function addTrainTurns() {
+  // eslint-disable-next-line guard-for-in, no-restricted-syntax
+  return new Promise((resolve) => {
+    (async () => {
+      for (let i = 0; i < defaultTrainTurns.length; i += 1) {
+        try {
+          const dataInput: any = { ...defaultTrainTurns[i] };
+          dataInput.intermediateStations = {
+            create: defaultTrainTurns[i].intermediateStations,
+          };
+          dataInput.trainCompartments = {
+            create: defaultTrainTurns[i].trainCompartments,
+          };
+          // eslint-disable-next-line no-await-in-loop
+          const turn = await prisma.trainTurn.upsert({
+            where: { turnNumber: defaultTrainTurns[i].turnNumber },
+            update: {},
+            create: dataInput,
+          });
+          console.info('Train turn created: ', turn.turnNumber);
+        } catch {
+          console.error(
+            'Error creating train turn: ',
+            defaultTrainTurns[i].turnNumber
+          );
+        }
+      }
+      resolve(true);
+    })();
+  });
+}
+
 async function main() {
   // Insert stations synchronously
   await insertStations();
@@ -420,6 +632,7 @@ async function main() {
   insertUsers();
   // Insert crew members asynchronously
   insertCrewMembers();
+  addTrainTurns();
 }
 
 main()

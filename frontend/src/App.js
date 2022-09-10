@@ -24,7 +24,8 @@ import ReserveSeats from 'pages/ticketingOfficer/ReserveSeats';
 import UserProfile from 'pages/UserProfile';
 import AllocateCrewMembers from 'pages/controlOfficer/AllocateCrewMembers';
 import ComplaintsSuggestions from 'pages/controlOfficer/ComplaintsSuggessions';
-import SearchTurns from 'pages/controlOfficer/SearchTurns';
+import SearchTurns from 'pages/controlOfficer/searchTurn/SearchTurns';
+import TurnDetails from 'pages/controlOfficer/searchTurn/TurnDetails';
 import ComplaintOrSuggestion from 'pages/controlOfficer/complaintsSuggestions/ComplaintOrSuggestion';
 import ProfileUser from 'pages/admin/manageUsers/ProfileUser';
 import ProfileCrewMember from 'pages/admin/manageUsers/ProfileCrewMember';
@@ -83,6 +84,12 @@ function App() {
                     element={<AllocateCrewMembers />}
                   />
                   <Route path="search-turn" element={<SearchTurns />} />
+                  <Route path="search-turn">
+                    <Route
+                      path="turn-details/:turnNumber"
+                      element={<TurnDetails />}
+                    />
+                  </Route>
                   <Route
                     path="complaints-suggestions"
                     element={<ComplaintsSuggestions />}
