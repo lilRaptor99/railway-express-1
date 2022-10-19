@@ -6,14 +6,28 @@ import Ticket from '../../components/Ticket';
 import SuccessImg from '../../../assets/images/success.png';
 // @ts-ignore
 import ErrorImg from '../../../assets/images/error.png';
+import { useEffect, useState } from 'react';
+import request from '../../utils/request';
 
 export default function DownloadTicket({ route, navigation }) {
-  const { paymentStatus } = route.params;
+  const { paymentStatus, ticketData } = route.params;
+
+  const [purchasedTickets, setPurchasedTickets] = useState([]);
 
   if (paymentStatus === 'ERROR') {
     setTimeout(() => {
       navigation.pop();
     }, 3000);
+  } else {
+    useEffect(() => {
+      getIssuedTicket();
+    }, []);
+  }
+
+  async function getIssuedTicket() {
+    const res = await request('POST', '/public/normal-ticket', ticketData);
+    console.log('Purchased tickets:', res.data.tickets);
+    setPurchasedTickets(res.data.tickets);
   }
 
   return (
@@ -40,7 +54,28 @@ export default function DownloadTicket({ route, navigation }) {
               <Text className="text-lg mt-4 font-normal text-slate-900">
                 Download/Share below ticket,
               </Text>
-              <Ticket ticketType="Normal" />
+              {purchasedTickets.map((ticket) => (
+                <Ticket
+                  key={ticket.ticketId}
+                  ticketType={
+                    ticket.ticketType === 'NORMAL' ? 'Normal' : 'Reservation'
+                  }
+                  ticketId={ticket.ticketId}
+                  start={{ station: ticket.startStation.name, time: '' }}
+                  end={{ station: ticket.destinationStation.name, time: '' }}
+                  status="Valid"
+                  date={new Date(ticket.createdAt).toDateString()}
+                  _class={
+                    ticket.ticketClass === 'FIRST_CLASS'
+                      ? 'First Class'
+                      : ticket.ticketClass === 'SECOND_CLASS'
+                      ? 'Second Class'
+                      : 'Third Class'
+                  }
+                  _return={ticket.return}
+                  price={ticket.price.toFixed(2)}
+                />
+              ))}
             </>
           ) : (
             <>

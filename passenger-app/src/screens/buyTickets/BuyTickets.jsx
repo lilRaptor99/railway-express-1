@@ -14,6 +14,7 @@ let toStation = null;
 let previousSelectedStations = [null, null];
 let stationData = null;
 let unitPrice = 0;
+let totalPrice = 0;
 
 export default function BuyTickets({ navigation }) {
   const [loginError, setLoginError] = useState(null);
@@ -60,11 +61,10 @@ export default function BuyTickets({ navigation }) {
           }
         }
         if (formikRef?.current?.values) {
-          setPrice(
-            formikRef.current?.values.return
-              ? unitPrice * parseInt(formikRef.current?.values.noOfTickets) * 2
-              : unitPrice * parseInt(formikRef.current?.values.noOfTickets)
-          );
+          totalPrice = formikRef.current?.values.return
+            ? unitPrice * parseInt(formikRef.current?.values.noOfTickets) * 2
+            : unitPrice * parseInt(formikRef.current?.values.noOfTickets);
+          setPrice(totalPrice);
         }
       })();
     }, 500);
@@ -90,10 +90,18 @@ export default function BuyTickets({ navigation }) {
       (stationObj) => stationObj.name === toStation
     )[0].stationId;
 
-    const submitValues = { ...values, from, to };
-    console.log('Values: ', submitValues);
+    const ticketData = {
+      startStationId: from,
+      destinationStationId: to,
+      price: values.return ? unitPrice * 2 : unitPrice,
+      email: values.email,
+      phoneNumber: values.phoneNumber,
+      quantity: Number.parseInt(values.noOfTickets),
+      return: values.return,
+    };
+    // console.log('Ticket Data: ', ticketData);
 
-    navigation.navigate('TicketPayment');
+    navigation.navigate('TicketPayment', { ticketData, totalPrice });
   }
 
   return (
@@ -204,7 +212,11 @@ export default function BuyTickets({ navigation }) {
                   <View className="flex-1 flex-row items-center">
                     <Text className="text-base">Price</Text>
                     <View className="pl-5">
-                      <TextInput value={`LKR ${price}`} errorText="" disabled />
+                      <TextInput
+                        value={`LKR ${price.toFixed(2)}`}
+                        errorText=""
+                        disabled
+                      />
                     </View>
                   </View>
 

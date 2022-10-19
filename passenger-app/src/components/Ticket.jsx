@@ -127,8 +127,8 @@ export default function Ticket({
                     ) : null}
 
                     <Text
-                      className="absolute top-5 left-1/2 text-sm font-bold w-32 text-slate-600"
-                      style={{ transform: [{ translateX: -50 }] }}
+                      className="absolute top-5 left-1/2 text-sm text-center font-bold w-32 text-slate-600"
+                      style={{ transform: [{ translateX: -60 }] }}
                     >
                       {start.station}
                     </Text>
@@ -146,8 +146,8 @@ export default function Ticket({
                     ) : null}
 
                     <Text
-                      className="absolute top-5 -left-1/2 text-sm font-bold w-32 text-slate-600"
-                      style={{ transform: [{ translateX: -40 }] }}
+                      className="absolute top-5 -left-1/2 text-sm text-center font-bold w-32 text-slate-600"
+                      style={{ transform: [{ translateX: -50 }] }}
                     >
                       {end.station}
                     </Text>

@@ -144,6 +144,7 @@ export async function issueNormalTicket(
         destinationStationId: inputTicketData.destinationStationId || undefined,
         startStationId: inputTicketData.startStationId || undefined,
       },
+      include: { startStation: true, destinationStation: true },
     });
     tickets.push(ticket);
   }

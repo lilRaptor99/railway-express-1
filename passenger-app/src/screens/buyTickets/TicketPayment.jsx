@@ -2,7 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
 
-export default function TicketPayment({ navigation }) {
+export default function TicketPayment({ route, navigation }) {
+  const { ticketData, totalPrice } = route.params;
+  console.log('Received ticket data', ticketData);
+
+  const ticketPaymentRefCode = 'TICKET_PAYMENT_' + Math.random();
   const html = /* HTML */ `
     <!DOCTYPE html>
     <html lang="en">
@@ -11,22 +15,23 @@ export default function TicketPayment({ navigation }) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Directpay|OneTimePayment</title>
       </head>
-      <div id="card_container"></div>
-      <div id="success"></div>
-      <div id="errors"></div>
+
       <body>
+        <div id="card_container"></div>
+        <div id="success"></div>
+        <div id="errors"></div>
         <script src="https://cdn.directpay.lk/dev/v1/directpayCardPayment.js?v=1"></script>
         <script>
           DirectPayCardPayment.init({
             container: 'card_container', //<div id="card_container"></div>
             merchantId: 'RR15074', //your merchant_id
-            amount: '100.00',
-            refCode: 'DP13', //unique referance code form merchant
+            amount: '${totalPrice.toString()}',
+            refCode: '${ticketPaymentRefCode}', //unique referance code form merchant
             currency: 'LKR',
             type: 'ONE_TIME_PAYMENT',
             customerEmail: 'abc@mail.com',
             customerMobile: '+94712345674',
-            description: 'Ticket-123', //product or service description
+            description: 'Ticket', //product or service description
             debug: true,
             responseCallback: responseCallback,
             errorCallback: errorCallback,
@@ -61,6 +66,7 @@ export default function TicketPayment({ navigation }) {
           onMessage={(event) => {
             navigation.replace('DownloadTicket', {
               paymentStatus: event.nativeEvent.data,
+              ticketData,
             });
           }}
         />

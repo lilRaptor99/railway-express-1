@@ -23,11 +23,13 @@ const passengerApi = Router()
 
 const userApi = Router().use(auth.required).use(userController);
 
+const publicApi = Router().use(auth.optional).use(publicController);
+
 const api = Router()
   .use(authController)
   .use('/admin', adminApi)
   .use('/passenger', passengerApi)
-  .use('/public', publicController)
+  .use('/public', publicApi)
   .use('/user', userApi)
   .use('/control-officer', controlOfficerApi);
 
