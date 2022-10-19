@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
-  createNormalTicket,
   forgotPassword,
   getStations,
   getTicketPrice,
+  issueNormalTicket,
   resetPasswordUsingKey,
   verifyEmail,
 } from '../services/public.service';
@@ -25,9 +25,6 @@ router.get(
   }
 );
 
-/**
- * Add Stations
- */
 router.post(
   '/verify-email',
   async (req: Request, res: Response, next: NextFunction) => {
@@ -95,18 +92,22 @@ router.post(
 );
 
 /**
- * Issue a normal ticket
+ * Create normal ticket
  */
 router.post(
-  '/issue-normal-ticket',
+  '/normal-ticket',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const ticket = await createNormalTicket(
-        req.body,
-        // @ts-ignore
-        req.auth.userId
+      // @ts-ignore
+      const userId = req?.auth?.userId;
+      const ticketData = { ...req.body };
+      delete ticketData.quantity;
+      const tickets = await issueNormalTicket(
+        userId,
+        ticketData,
+        req.body.quantity
       );
-      res.json(ticket);
+      res.json({ tickets });
     } catch (error) {
       next(error);
     }

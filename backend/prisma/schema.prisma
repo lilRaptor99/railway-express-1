@@ -43,18 +43,18 @@ enum Status {
 }
 
 model Station {
-  stationId           String                @id
-  name                String
-  address             String
-  phoneNumber         String
-  location            String
-  adjacentTo          Station[]             @relation("AdjacentStations")
-  adjacentFrom        Station[]             @relation("AdjacentStations")
-  User                User[]
-  CrewMember          CrewMember[]
-  IntermediateStation IntermediateStation[]
-  StartStationTicket  Ticket[]              @relation("startStation")
-  DestStationTicket   Ticket[]              @relation("destStation")
+  stationId                String                @id
+  name                     String
+  address                  String
+  phoneNumber              String
+  location                 String
+  adjacentTo               Station[]             @relation("AdjacentStations")
+  adjacentFrom             Station[]             @relation("AdjacentStations")
+  User                     User[]
+  CrewMember               CrewMember[]
+  IntermediateStation      IntermediateStation[]
+  ticketStartStation       Ticket[]              @relation("ticketStartStation")
+  ticketDestinationStation Ticket[]              @relation("ticketDestinationStation")
 }
 
 model CrewMember {
@@ -134,54 +134,6 @@ enum TrainTurnType {
   INTERCITY
 }
 
-model Ticket {
-  ticketId        String                @id @default(uuid())
-  user            User?                 @relation(fields: [userId], references: [userId])
-  userId          String?
-  ticketClass     TrainReservationClass
-  startingStation Station               @relation("startStation", fields: [startStationId], references: [stationId])
-  destination     Station               @relation("destStation", fields: [destStationId], references: [stationId])
-  status          TicketStatus
-  email           String?
-  issuedOn        DateTime              @default(now())
-  startStationId  String
-  destStationId   String
-  price           Decimal
-  NormalTicket    NormalTicket?
-  ReserveTicket   ReserveTicket?
-  SeasonTicket    SeasonTicket?
-}
-
-model NormalTicket {
-  ticket       Ticket  @relation(fields: [ticketId], references: [ticketId])
-  returnStatus Boolean
-  ticketId     String  @id
-}
-
-model ReserveTicket {
-  ticket           Ticket          @relation(fields: [ticketId], references: [ticketId])
-  ticketId         String          @id
-  turnNumber       String
-  noOfSeats        Int
-  primaryPassenger String
-  date             DateTime
-  ReservedSeats    ReservedSeats[]
-}
-
-model ReservedSeats {
-  ticket          ReserveTicket @relation(fields: [reserveTicketId], references: [ticketId])
-  reserveTicketId String
-  seatNo          String
-  NIC             String        @unique
-}
-
-model SeasonTicket {
-  ticket         Ticket   @relation(fields: [ticketId], references: [ticketId])
-  ticketId       String   @id
-  passenngerName String
-  expirationDate DateTime
-}
-
 enum TrainReservationClass {
   FIRST_CLASS
   SECOND_CLASS
@@ -198,7 +150,33 @@ model ComplaintsAndSuggestions {
   isComplaint Boolean
 }
 
+model Ticket {
+  ticketId             String                @id @default(uuid())
+  userId               String?
+  user                 User?                 @relation(fields: [userId], references: [userId])
+  createdAt            DateTime              @default(now())
+  return               Boolean               @default(false)
+  price                Float
+  ticketClass          TrainReservationClass @default(THIRD_CLASS)
+  email                String?
+  phoneNumber          String?
+  ticketStatus         TicketStatus          @default(UNUSED)
+  ticketType           TicketType            @default(NORMAL)
+  startStationId       String?
+  startStation         Station?              @relation("ticketStartStation", fields: [startStationId], references: [stationId])
+  destinationStationId String?
+  destinationStation   Station?              @relation("ticketDestinationStation", fields: [destinationStationId], references: [stationId])
+}
+
 enum TicketStatus {
-  USED
   UNUSED
+  EXPIRED
+  USED
+  USED_ONE_WAY
+}
+
+enum TicketType {
+  NORMAL
+  RESERVATION
+  SEASON
 }

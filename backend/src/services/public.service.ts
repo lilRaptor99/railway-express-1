@@ -128,39 +128,24 @@ export async function resetPasswordUsingKey(
   });
 }
 
-export async function createNormalTicket(
-  input: NormalTicketInput,
-  userId: string
+export async function issueNormalTicket(
+  userId: string | null,
+  inputTicketData: Ticket,
+  quantity = 1
 ) {
-  let ticket;
-  if (userId != null) {
-    ticket = {
-      ...input,
-      user: userId,
-      returnStatus: undefined,
-      numberOfTickets: undefined,
-    } as Ticket;
-  } else {
-    ticket = {
-      ...input,
-      returnStatus: undefined,
-      numberOfTickets: undefined,
-    } as Ticket;
-  }
-
-  const createdTicketArray = [];
-  for (let i = 0; i < input.numberOfTickets; i += 1) {
+  const tickets = [];
+  for (let i = 0; i < quantity; i += 1) {
     // eslint-disable-next-line no-await-in-loop
-    const createdTicket = await prisma.normalTicket.create({
+    const ticket = await prisma.ticket.create({
       data: {
-        returnStatus: input.returnStatus,
-        ticket: {
-          create: ticket,
-        },
+        ...inputTicketData,
+        price: inputTicketData.price,
+        userId,
+        destinationStationId: inputTicketData.destinationStationId || undefined,
+        startStationId: inputTicketData.startStationId || undefined,
       },
-      select: { returnStatus: true, ticket: true },
     });
-    createdTicketArray.push(createdTicket);
+    tickets.push(ticket);
   }
-  return createdTicketArray;
+  return tickets;
 }
