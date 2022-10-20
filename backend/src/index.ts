@@ -5,6 +5,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import routes from './routes/routes';
 import HttpException from './models/http-exception.model';
+import updateTrainSchedule from './utils/train-schedule.utils';
 
 const fileUpload = require('express-fileupload');
 
@@ -79,6 +80,10 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
     console.info(`server up on port ${PORT}`);
   });
 }
+
+// Update train schedule after starting app
+updateTrainSchedule();
+
 // function fileUpload(): any {
 //   throw new Error('Function not implemented.');
 // }

@@ -58,16 +58,20 @@ model Station {
 }
 
 model CrewMember {
-  userId      String     @id @default(uuid())
-  firstName   String
-  lastName    String
-  phoneNumber String
-  nic         String     @unique
-  address     String?
-  station     Station    @relation(fields: [stationId], references: [stationId])
-  occupation  Occupation
-  stationId   String
-  visibility  Visibility @default(VISIBLE)
+  userId                        String          @id @default(uuid())
+  firstName                     String
+  lastName                      String
+  phoneNumber                   String
+  nic                           String          @unique
+  address                       String?
+  station                       Station         @relation(fields: [stationId], references: [stationId])
+  occupation                    Occupation
+  stationId                     String
+  visibility                    Visibility      @default(VISIBLE)
+  TrainSchedule_headGuard       TrainSchedule[] @relation("headGuard")
+  TrainSchedule_underGuard      TrainSchedule[] @relation("underGuard")
+  TrainSchedule_driver          TrainSchedule[] @relation("driver")
+  TrainSchedule_driverAssistant TrainSchedule[] @relation("driverAssistant")
 }
 
 enum Occupation {
@@ -96,6 +100,7 @@ model TrainTurn {
   type                 TrainTurnType         @default(SLOW)
   intermediateStations IntermediateStation[]
   trainCompartments    TrainCompartment[]
+  TrainSchedule        TrainSchedule[]
 }
 
 model TrainCompartment {
@@ -179,4 +184,23 @@ enum TicketType {
   NORMAL
   RESERVATION
   SEASON
+}
+
+model TrainSchedule {
+  trainTurn             TrainTurn   @relation(fields: [turnNumber], references: [turnNumber])
+  turnNumber            Int
+  date                  DateTime
+  cancelled             Boolean     @default(false)
+  delayed               Boolean     @default(false)
+  delayTime             String?
+  headGuard             CrewMember? @relation("headGuard", fields: [headGuardUserId], references: [userId])
+  headGuardUserId       String?
+  underGuard            CrewMember? @relation("underGuard", fields: [underGuardUserId], references: [userId])
+  underGuardUserId      String?
+  driver                CrewMember? @relation("driver", fields: [driverUserId], references: [userId])
+  driverUserId          String?
+  driverAssistant       CrewMember? @relation("driverAssistant", fields: [driverAssistantUserId], references: [userId])
+  driverAssistantUserId String?
+
+  @@id([turnNumber, date])
 }
