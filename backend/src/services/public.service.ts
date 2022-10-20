@@ -150,3 +150,39 @@ export async function issueNormalTicket(
   }
   return tickets;
 }
+
+export async function getTrainSchedule() {
+  const todayUTC = new Date(new Date().toDateString());
+  const todaySL = new Date(todayUTC);
+  todaySL.setHours(todayUTC.getHours() + 5);
+  todaySL.setMinutes(todayUTC.getMinutes() + 30);
+  const getScheduleFromDate = new Date(todaySL);
+  getScheduleFromDate.setDate(todaySL.getDate() - 7);
+
+  return prisma.trainSchedule.findMany({
+    where: { date: { gte: getScheduleFromDate } },
+    include: { trainTurn: true },
+  });
+}
+
+export async function searchTrainSchedule(
+  from: string,
+  to: string,
+  date: Date
+) {
+  const results = await prisma.trainSchedule.findMany({
+    where: {
+      date,
+      trainTurn: {
+        intermediateStations: { some: { stationId: from } },
+        AND: { intermediateStations: { some: { stationId: to } } },
+      },
+    },
+    include: {
+      trainTurn: {
+        include: { intermediateStations: true },
+      },
+    },
+  });
+  return results;
+}

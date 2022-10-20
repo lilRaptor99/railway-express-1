@@ -3,8 +3,10 @@ import {
   forgotPassword,
   getStations,
   getTicketPrice,
+  getTrainSchedule,
   issueNormalTicket,
   resetPasswordUsingKey,
+  searchTrainSchedule,
   verifyEmail,
 } from '../services/public.service';
 
@@ -108,6 +110,41 @@ router.post(
         req.body.quantity
       );
       res.json({ tickets });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Get train schedule
+ */
+router.get(
+  '/train-schedule',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const trainSchedule = await getTrainSchedule();
+      res.json({ trainSchedule });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Search trains
+ */
+router.post(
+  '/search-schedule',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const date = new Date(req.body.date);
+      const results = await searchTrainSchedule(
+        req.body.from,
+        req.body.to,
+        date
+      );
+      res.json({ results });
     } catch (error) {
       next(error);
     }
