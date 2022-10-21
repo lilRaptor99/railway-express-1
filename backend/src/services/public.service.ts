@@ -180,9 +180,20 @@ export async function searchTrainSchedule(
     },
     include: {
       trainTurn: {
-        include: { intermediateStations: true },
+        include: { intermediateStations: { include: { station: true } } },
       },
     },
   });
-  return results;
+
+  const searchResults = results.filter((result) => {
+    const stationArr = result.trainTurn.intermediateStations;
+    let startStationIndex = 0;
+    let destinationStationIndex = 0;
+    stationArr.forEach((station, index) => {
+      if (station.stationId === from) startStationIndex = index;
+      else if (station.stationId === to) destinationStationIndex = index;
+    });
+    return startStationIndex < destinationStationIndex;
+  });
+  return searchResults;
 }

@@ -19,7 +19,9 @@ export default function SearchTrains({ navigation }) {
   const [allStations, setAllStations] = useState([]);
 
   setTimeout(() => {
-    navigation.navigate('Buy Tickets');
+    navigation.navigate('SearchResults', {
+      searchQuery: { from: 'FOT', to: 'PDN' },
+    });
   }, 100);
 
   useEffect(() => {
@@ -52,8 +54,7 @@ export default function SearchTrains({ navigation }) {
 
     setTimeout(() => {
       navigation.navigate('SearchResults', {
-        from,
-        to,
+        searchQuery: { from, to },
       });
     }, 100);
   }
