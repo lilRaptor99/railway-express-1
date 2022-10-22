@@ -29,6 +29,11 @@ import TrainDetails from './src/screens/search/TrainDetails';
 import MyTickets from './src/screens/tickets/MyTickets';
 import SearchTimeTable from './src/screens/timeTables/SearchTimeTable';
 import StationSchedule from './src/screens/timeTables/StationSchedule';
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs([
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
+  'AsyncStorage has been extracted from react-native core and will be removed in a future release.',
+]);
 
 export const Stack = createNativeStackNavigator();
 export const Drawer = createDrawerNavigator();

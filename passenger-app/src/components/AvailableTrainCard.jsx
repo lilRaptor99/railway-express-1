@@ -92,7 +92,7 @@ export default function AvailableTrainCard({
                     {start.time}
                   </Text>
                   <Text
-                    className="absolute top-5 -left-1/2 text-base font-bold w-32 text-slate-600"
+                    className="absolute top-5 -left-1/2 text-base text-center font-bold w-32 text-slate-600"
                     style={{ transform: [{ translateX: -50 }] }}
                   >
                     {start.station}
@@ -108,7 +108,7 @@ export default function AvailableTrainCard({
                     {end.time}
                   </Text>
                   <Text
-                    className="absolute top-5 -left-1/2 text-base font-bold w-32 text-slate-600"
+                    className="absolute top-5 -left-1/2 text-base text-center font-bold w-32 text-slate-600"
                     style={{ transform: [{ translateX: -40 }] }}
                   >
                     {end.station}

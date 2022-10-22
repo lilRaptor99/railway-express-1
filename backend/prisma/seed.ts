@@ -370,7 +370,7 @@ const defaultTrainTurns: TrainTurnInput[] = [
   },
   {
     turnNumber: 1029,
-    turnName: '',
+    turnName: 'Udarata Intercity',
     reservable: true,
     availability: 'DAILY',
     type: 'INTERCITY',
