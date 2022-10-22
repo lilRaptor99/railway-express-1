@@ -5,7 +5,6 @@ import prisma from '../../prisma/prisma-client';
 import HttpException from '../models/http-exception.model';
 import { generateVerifyKey } from '../utils/math-utils';
 import sendMail from '../utils/send-mail';
-import { NormalTicketInput } from '../models/normal-ticket-input.model';
 
 const fs = require('fs');
 

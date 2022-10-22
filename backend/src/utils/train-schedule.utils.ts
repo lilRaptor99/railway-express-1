@@ -19,9 +19,9 @@ export default async function updateTrainSchedule() {
   todaySL.setMinutes(todayUTC.getMinutes() + 30);
 
   const lastDateToUpdate = new Date(todaySL);
-  lastDateToUpdate.setDate(todaySL.getDate() + 7);
+  lastDateToUpdate.setDate(todaySL.getDate() + 14);
   const firstDateToUpdate = new Date(todaySL);
-  firstDateToUpdate.setDate(todaySL.getDate() - 7);
+  firstDateToUpdate.setDate(todaySL.getDate() - 14);
 
   // console.info('Last schedule updated date: ', latestSchedule?.date);
   // console.info('Todays date: ', todaySL);

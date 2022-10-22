@@ -171,6 +171,7 @@ model Ticket {
   startStation         Station?              @relation("ticketStartStation", fields: [startStationId], references: [stationId])
   destinationStationId String?
   destinationStation   Station?              @relation("ticketDestinationStation", fields: [destinationStationId], references: [stationId])
+  Reservation          Reservation?
 }
 
 enum TicketStatus {
@@ -187,20 +188,48 @@ enum TicketType {
 }
 
 model TrainSchedule {
-  trainTurn             TrainTurn   @relation(fields: [turnNumber], references: [turnNumber])
+  trainScheduleId       String          @id @default(uuid())
+  trainTurn             TrainTurn       @relation(fields: [turnNumber], references: [turnNumber])
   turnNumber            Int
   date                  DateTime
-  cancelled             Boolean     @default(false)
-  delayed               Boolean     @default(false)
+  cancelled             Boolean         @default(false)
+  delayed               Boolean         @default(false)
   delayTime             String?
-  headGuard             CrewMember? @relation("headGuard", fields: [headGuardUserId], references: [userId])
+  headGuard             CrewMember?     @relation("headGuard", fields: [headGuardUserId], references: [userId])
   headGuardUserId       String?
-  underGuard            CrewMember? @relation("underGuard", fields: [underGuardUserId], references: [userId])
+  underGuard            CrewMember?     @relation("underGuard", fields: [underGuardUserId], references: [userId])
   underGuardUserId      String?
-  driver                CrewMember? @relation("driver", fields: [driverUserId], references: [userId])
+  driver                CrewMember?     @relation("driver", fields: [driverUserId], references: [userId])
   driverUserId          String?
-  driverAssistant       CrewMember? @relation("driverAssistant", fields: [driverAssistantUserId], references: [userId])
+  driverAssistant       CrewMember?     @relation("driverAssistant", fields: [driverAssistantUserId], references: [userId])
   driverAssistantUserId String?
+  ReservedSeats         ReservedSeats[]
+  Reservation           Reservation[]
 
-  @@id([turnNumber, date])
+  @@unique([turnNumber, date])
+}
+
+model ReservedSeats {
+  trainSchedule   TrainSchedule      @relation(fields: [trainScheduleId], references: [trainScheduleId])
+  trainScheduleId String
+  seatNumber      String
+  status          ReservedSeatStatus @default(AVAILABLE)
+
+  @@id([trainScheduleId, seatNumber])
+}
+
+enum ReservedSeatStatus {
+  AVAILABLE // Seat is free
+  UNAVAILABLE // Seat is in the process of reservation
+  RESERVED
+}
+
+model Reservation {
+  reservationId              String        @id
+  ticket                     Ticket        @relation(fields: [reservationId], references: [ticketId])
+  primaryPassengerName       String
+  passengerNICs              String[]
+  reservedSeats              String[]
+  reservationTrainSchedule   TrainSchedule @relation(fields: [reservationTrainScheduleId], references: [trainScheduleId])
+  reservationTrainScheduleId String
 }
