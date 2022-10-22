@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
+  createNormalTicket,
   getStations,
   getTicketPrice,
   forgotPassword,
@@ -78,7 +79,7 @@ export default router;
 /**
  * Get ticket prices
  */
-router.get(
+router.post(
   '/ticket-prices/:ticketType/:ticketClass/',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -88,7 +89,26 @@ router.get(
         req.body.from,
         req.body.to
       );
-      res.json(price);
+      res.json({ price });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Issue a normal ticket
+ */
+router.post(
+  '/issue-normal-ticket',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const ticket = await createNormalTicket(
+        req.body,
+        // @ts-ignore
+        req.auth.userId
+      );
+      res.json(ticket);
     } catch (error) {
       next(error);
     }

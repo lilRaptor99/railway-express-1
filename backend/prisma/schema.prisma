@@ -26,6 +26,7 @@ model User {
   status        Status                     @default(ACTIVE)
   ReasonToBlock ReasonToBlock[]
   Complaints    ComplaintsAndSuggestions[]
+  Ticket        Ticket[]
 }
 
 enum Role {
@@ -52,6 +53,8 @@ model Station {
   User                User[]
   CrewMember          CrewMember[]
   IntermediateStation IntermediateStation[]
+  StartStationTicket  Ticket[]              @relation("startStation")
+  DestStationTicket   Ticket[]              @relation("destStation")
 }
 
 model CrewMember {
@@ -131,6 +134,54 @@ enum TrainTurnType {
   INTERCITY
 }
 
+model Ticket {
+  ticketId        String                @id @default(uuid())
+  user            User?                 @relation(fields: [userId], references: [userId])
+  userId          String?
+  ticketClass     TrainReservationClass
+  startingStation Station               @relation("startStation", fields: [startStationId], references: [stationId])
+  destination     Station               @relation("destStation", fields: [destStationId], references: [stationId])
+  status          TicketStatus
+  email           String?
+  issuedOn        DateTime              @default(now())
+  startStationId  String
+  destStationId   String
+  price           Decimal
+  NormalTicket    NormalTicket?
+  ReserveTicket   ReserveTicket?
+  SeasonTicket    SeasonTicket?
+}
+
+model NormalTicket {
+  ticket       Ticket  @relation(fields: [ticketId], references: [ticketId])
+  returnStatus Boolean
+  ticketId     String  @id
+}
+
+model ReserveTicket {
+  ticket           Ticket          @relation(fields: [ticketId], references: [ticketId])
+  ticketId         String          @id
+  turnNumber       String
+  noOfSeats        Int
+  primaryPassenger String
+  date             DateTime
+  ReservedSeats    ReservedSeats[]
+}
+
+model ReservedSeats {
+  ticket          ReserveTicket @relation(fields: [reserveTicketId], references: [ticketId])
+  reserveTicketId String
+  seatNo          String
+  NIC             String        @unique
+}
+
+model SeasonTicket {
+  ticket         Ticket   @relation(fields: [ticketId], references: [ticketId])
+  ticketId       String   @id
+  passenngerName String
+  expirationDate DateTime
+}
+
 enum TrainReservationClass {
   FIRST_CLASS
   SECOND_CLASS
@@ -145,4 +196,9 @@ model ComplaintsAndSuggestions {
   title       String
   description String
   isComplaint Boolean
+}
+
+enum TicketStatus {
+  USED
+  UNUSED
 }

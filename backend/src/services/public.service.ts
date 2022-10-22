@@ -1,10 +1,11 @@
 import bcrypt from 'bcryptjs';
-import { Station } from '@prisma/client';
 import { parse } from 'papaparse';
+import { Station, Ticket } from '@prisma/client';
 import prisma from '../../prisma/prisma-client';
 import HttpException from '../models/http-exception.model';
 import { generateVerifyKey } from '../utils/math-utils';
 import sendMail from '../utils/send-mail';
+import { NormalTicketInput } from '../models/normal-ticket-input.model';
 
 const fs = require('fs');
 
@@ -125,4 +126,41 @@ export async function resetPasswordUsingKey(
       password: hashedPassword,
     },
   });
+}
+
+export async function createNormalTicket(
+  input: NormalTicketInput,
+  userId: string
+) {
+  let ticket;
+  if (userId != null) {
+    ticket = {
+      ...input,
+      user: userId,
+      returnStatus: undefined,
+      numberOfTickets: undefined,
+    } as Ticket;
+  } else {
+    ticket = {
+      ...input,
+      returnStatus: undefined,
+      numberOfTickets: undefined,
+    } as Ticket;
+  }
+
+  const createdTicketArray = [];
+  for (let i = 0; i < input.numberOfTickets; i += 1) {
+    // eslint-disable-next-line no-await-in-loop
+    const createdTicket = await prisma.normalTicket.create({
+      data: {
+        returnStatus: input.returnStatus,
+        ticket: {
+          create: ticket,
+        },
+      },
+      select: { returnStatus: true, ticket: true },
+    });
+    createdTicketArray.push(createdTicket);
+  }
+  return createdTicketArray;
 }

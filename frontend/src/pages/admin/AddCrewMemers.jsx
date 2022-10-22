@@ -63,7 +63,6 @@ export default function AddCrewMember() {
     setaddError('');
     setaddSuccess(false);
     try {
-      // @ts-ignore
       await request('post', `/admin/crewMember`, {
         ...values,
         // @ts-ignore
