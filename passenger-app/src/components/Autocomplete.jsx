@@ -8,9 +8,9 @@ export default function Autocomplete({
   itemsArray,
   placeholder,
   onSelectItem,
-  currentItem = null,
+  currentItem = '',
 }) {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(currentItem);
   const queriedStations = itemsArray.filter((item) => {
     return item.toLowerCase().includes(query.toLowerCase());
   });

@@ -13,16 +13,15 @@ let fromStation = null;
 let toStation = null;
 let stationData = null;
 
-export default function SearchTrains({ navigation }) {
+export default function SearchTrains({ route, navigation }) {
   const [loginError, setLoginError] = useState(null);
-
   const [allStations, setAllStations] = useState([]);
 
-  setTimeout(() => {
-    navigation.navigate('SearchResults', {
-      searchQuery: { from: 'FOT', to: 'PDN' },
-    });
-  }, 100);
+  // setTimeout(() => {
+  //   navigation.navigate('SearchResults', {
+  //     searchQuery: { from: 'FOT', to: 'PDN' },
+  //   });
+  // }, 100);
 
   useEffect(() => {
     request('get', '/public/stations')

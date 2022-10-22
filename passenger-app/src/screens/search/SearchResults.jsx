@@ -147,8 +147,14 @@ export default function SearchResults({ route, navigation }) {
                   ? { status: 'Cancelled', time: '0h 0m' }
                   : train.delayed
                   ? { status: 'Delayed', time: train.delayTime }
-                  : { status: 'ETA', time: '00h 00m' }
+                  : // : { status: '', time: '' }
+                    { status: 'ETA', time: '00h 00m' }
               }
+              handlePress={() => {
+                navigation.navigate('TrainDetails', {
+                  trainSchedule: train,
+                });
+              }}
             />
           );
         })}

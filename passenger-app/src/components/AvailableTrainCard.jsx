@@ -10,14 +10,8 @@ export default function AvailableTrainCard({
   end = { station: 'Anuradhapura', time: '10:40 AM' },
   duration = '4h 5m',
   tag = { status: 'ETA', time: '23mins' },
+  handlePress,
 }) {
-  const navigation = useNavigation();
-
-  function handleCardPress() {
-    // @ts-ignore
-    navigation.navigate('TrainDetails');
-  }
-
   function getTag() {
     switch (tag.status) {
       case 'Cancelled':
@@ -42,12 +36,18 @@ export default function AvailableTrainCard({
           </View>
         );
 
-      default:
+      case 'ETA':
         return (
           <View className="bg-slate-300 rounded-full px-3 py-2 mr-3">
             <Text>
               {tag.status} {tag.time}
             </Text>
+          </View>
+        );
+      default:
+        return (
+          <View className="">
+            <Text></Text>
           </View>
         );
     }
@@ -61,7 +61,7 @@ export default function AvailableTrainCard({
       }}
     >
       <TouchableRipple
-        onPress={handleCardPress}
+        onPress={handlePress}
         className="rounded-3xl"
         rippleColor="rgba(0, 0, 0, 0.1)"
         borderless
