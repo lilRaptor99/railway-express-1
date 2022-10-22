@@ -53,4 +53,25 @@ export async function deleteTrainTurn(trainTurnNumber: number) {
   await prisma.$transaction([deleteStations, deleteCompartments, deleteTurn]);
 }
 
+export async function getComplaintsAndSuggestions() {
+  const feedbackList = await prisma.complaintsAndSuggestions.findMany({
+    include: {
+      user: true,
+    },
+  });
+
+  return feedbackList;
+}
+
+export async function getFeedbackById(id: string) {
+  const feedback = await prisma.complaintsAndSuggestions.findUnique({
+    where: { complaintId: id },
+    include: {
+      user: true,
+    },
+  });
+
+  return feedback;
+}
+
 export function testFunction() {}

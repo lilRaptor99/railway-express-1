@@ -23,12 +23,12 @@ import AddCrewMember from 'pages/admin/AddCrewMemers';
 import ReserveSeats from 'pages/ticketingOfficer/ReserveSeats';
 import UserProfile from 'pages/UserProfile';
 import AllocateCrewMembers from 'pages/controlOfficer/AllocateCrewMembers';
-import ComplaintsSuggestions from 'pages/controlOfficer/ComplaintsSuggessions';
 import SearchTurns from 'pages/controlOfficer/searchTurn/SearchTurns';
 import TurnDetails from 'pages/controlOfficer/searchTurn/TurnDetails';
-import ComplaintOrSuggestion from 'pages/controlOfficer/complaintsSuggestions/ComplaintOrSuggestion';
+import ComplaintOrSuggestion from 'pages/controlOfficer/complaintsSuggestions/ComplaintOrSuggestionDetails';
 import ProfileUser from 'pages/admin/manageUsers/ProfileUser';
 import ProfileCrewMember from 'pages/admin/manageUsers/ProfileCrewMember';
+import ComplaintsSuggestions from 'pages/controlOfficer/complaintsSuggestions/ComplaintsSuggestions';
 
 function App() {
   return (
@@ -96,7 +96,7 @@ function App() {
                   />
                   <Route path="complaints-suggestions">
                     <Route
-                      path="description"
+                      path="description/:id"
                       element={<ComplaintOrSuggestion />}
                     />
                   </Route>

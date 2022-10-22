@@ -214,11 +214,19 @@ export default function TurnDetails() {
         <div className="flex justify-center w-full">
           <CircularProgress className="mt-5 text-slate-500" />
         </div>
+      ) : turnDetails === null ? (
+        <div className="flex justify-center w-full mt-10">
+          <h1 className="font-light">No such turn exists!</h1>
+        </div>
       ) : (
         turnDetailTable(turnDetails)
       )}
 
-      <div className="flex justify-center w-full mt-10">
+      <div
+        className={
+          turnDetails === null ? 'hidden' : 'flex justify-center w-full mt-10'
+        }
+      >
         <Button
           type="button"
           isLoading={false}

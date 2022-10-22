@@ -4,6 +4,8 @@ import {
   getTrainTurns,
   getTrainTurnByTurnNumber,
   deleteTrainTurn,
+  getFeedbackById,
+  getComplaintsAndSuggestions,
 } from '../services/control-officer.service';
 
 const router = Router();
@@ -58,6 +60,32 @@ router.delete(
       const trainTurnNumber = parseInt(req.params.turnNumber, 10);
       await deleteTrainTurn(trainTurnNumber);
       res.json({ status: 'success' });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Get complaints and suggestions
+router.get(
+  '/complaints-suggestions',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const feedbackList = await getComplaintsAndSuggestions();
+      res.json(feedbackList);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Get compalaints or suggestions by id
+router.get(
+  '/complaints-suggestions/:id',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const feedback = await getFeedbackById(req.params.id);
+      res.json(feedback);
     } catch (error) {
       next(error);
     }
