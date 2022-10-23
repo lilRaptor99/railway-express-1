@@ -13,14 +13,14 @@ import CustomNavigationBar from './src/components/CustomNavigationBar';
 
 import { useEffect, useState } from 'react';
 import Login from './src/screens/auth/Login';
-import ComplaintsAndSuggestions from './src/screens/complaintsSuggestions/ComplaintsAndSuggestions';
 import MyProfile from './src/screens/myProfile/MyProfile';
-import SearchTrains from './src/screens/search/SearchTrains';
-import MyTickets from './src/screens/tickets/MyTickets';
+import InitialScreen from './src/screens/initialScreen/InitialScreen';
+import TicketChecker from './src/screens/tickets/TicketChecker';
 import { LogBox } from 'react-native';
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
   'AsyncStorage has been extracted from react-native core and will be removed in a future release.',
+  `The action 'NAVIGATE' with payload {"name":"Ticket Validator"} was not handled by any navigator.`,
   'Possible Unhandled Promise Rejection ...',
   'Request error: , [AxiosError: Request failed with status code 401]',
 ]);
@@ -28,35 +28,35 @@ LogBox.ignoreLogs([
 export const Stack = createNativeStackNavigator();
 export const Drawer = createDrawerNavigator();
 
-function SearchNavigators() {
+function InitialNavigators() {
   return (
     <Stack.Navigator
-      initialRouteName="SearchTrains"
+      initialRouteName="InitialScreen"
       screenOptions={{
         header: (props) => <CustomNavigationBar {...props} />,
       }}
     >
       <Stack.Screen
-        name="SearchTrains"
-        component={SearchTrains}
-        initialParams={{ screenTitle: 'Search Trains' }}
+        name="InitialScreen"
+        component={InitialScreen}
+        initialParams={{ screenTitle: 'Initial Screen' }}
       />
     </Stack.Navigator>
   );
 }
 
-function MyTicketsNavigators() {
+function TicketCheckerNavigators() {
   return (
     <Stack.Navigator
-      initialRouteName="MyTickets"
+      initialRouteName="TicketChecker"
       screenOptions={{
         header: (props) => <CustomNavigationBar {...props} />,
       }}
     >
       <Stack.Screen
-        name="MyTickets"
-        component={MyTickets}
-        initialParams={{ screenTitle: 'My Tickets' }}
+        name="TicketChecker"
+        component={TicketChecker}
+        initialParams={{ screenTitle: 'Ticket Validator' }}
       />
     </Stack.Navigator>
   );
@@ -78,22 +78,6 @@ function AuthNavigators() {
   );
 }
 
-function ComplaintsAndSuggestionsNavigators() {
-  return (
-    <Stack.Navigator
-      initialRouteName="ComplaintsAndSuggestions"
-      screenOptions={{
-        header: (props) => <CustomNavigationBar {...props} />,
-      }}
-    >
-      <Stack.Screen
-        name="ComplaintsAndSuggestions"
-        component={ComplaintsAndSuggestions}
-        initialParams={{ screenTitle: 'Complaints and Suggestions' }}
-      />
-    </Stack.Navigator>
-  );
-}
 function MyProfileNavigators() {
   return (
     <Stack.Navigator
@@ -126,19 +110,14 @@ export default function App() {
       return (
         <>
           <Drawer.Screen
-            name="My Tickets"
-            component={MyTicketsNavigators}
+            name="Ticket Validator"
+            component={TicketCheckerNavigators}
             options={drawerScreenOptions({ icon: 'barcode' })}
           />
           <Drawer.Screen
             name="My Profile"
             component={MyProfileNavigators}
             options={drawerScreenOptions({ icon: 'card-account-details' })}
-          />
-          <Drawer.Screen
-            name="Complaints and Suggestions"
-            component={ComplaintsAndSuggestionsNavigators}
-            options={drawerScreenOptions({ icon: 'message-processing' })}
           />
         </>
       );
@@ -170,16 +149,19 @@ export default function App() {
       <PaperProvider theme={theme}>
         <NavigationContainer theme={theme}>
           <Drawer.Navigator
-            initialRouteName="Search Trains"
+            initialRouteName="Initial Screen"
             screenOptions={{
               header: () => undefined,
             }}
             drawerContent={CustomDrawer}
           >
             <Drawer.Screen
-              name="Search Trains"
-              component={SearchNavigators}
-              options={drawerScreenOptions({ icon: 'magnify' })}
+              name="Initial Screen"
+              component={InitialNavigators}
+              options={{
+                ...drawerScreenOptions({ icon: 'login' }),
+                drawerItemStyle: { display: 'none' },
+              }}
             />
 
             {getUserScreens()}

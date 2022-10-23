@@ -40,7 +40,7 @@ export default function Login({ navigation }) {
       setLoginSuccess(true);
       setTimeout(() => {
         setLoginSuccess(false);
-        navigation.navigate('Search Trains');
+        navigation.navigate('Ticket Validator');
       }, 1500);
     } catch (e) {
       if (e?.response?.status === 401) {
@@ -116,13 +116,6 @@ export default function Login({ navigation }) {
               </>
             )}
           </Formik>
-          <Button
-            mode="text"
-            className="mt-6"
-            onPress={() => navigation.navigate('ForgotPassword')}
-          >
-            Forgot Password?
-          </Button>
         </KeyboardAvoidingView>
       </ScrollView>
       <Snackbar
@@ -141,7 +134,7 @@ export default function Login({ navigation }) {
         onDismiss={() => {}}
         style={{ backgroundColor: theme.colors.success }}
       >
-        Login success! Redirecting to search...
+        Login success! Redirecting...
       </Snackbar>
     </>
   );

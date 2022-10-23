@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "passenger-app",
-    "slug": "passenger-app",
+    "name": "ticket-checker-app",
+    "slug": "ticket-checker-app",
     "version": "1.0.0",
     "assetBundlePatterns": ["**/*"]
   },
-  "name": "passenger-app"
+  "name": "ticket-checker-app"
 }
