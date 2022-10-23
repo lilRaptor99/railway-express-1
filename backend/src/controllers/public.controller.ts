@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import {
   forgotPassword,
+  getStation,
   getStations,
   getTicketPrice,
   getTrainSchedule,
@@ -8,6 +9,7 @@ import {
   reserveSeats,
   issueSeasonTicket,
   resetPasswordUsingKey,
+  searchStationSchedule,
   searchTrainSchedule,
   verifyEmail,
   getAvailableSeatCount,
@@ -199,6 +201,23 @@ router.post(
     try {
       const reservationTicket = await reserveSeats(req.body);
       res.json(reservationTicket);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Search station schedule
+ */
+router.post(
+  '/search-station-schedule',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const date = new Date(req.body.date);
+      const results = await searchStationSchedule(req.body.from, date);
+      const stationDetails = await getStation(req.body.from);
+      res.json({ stationDetails, results });
     } catch (error) {
       next(error);
     }

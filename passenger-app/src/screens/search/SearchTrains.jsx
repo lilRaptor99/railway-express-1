@@ -18,8 +18,8 @@ export default function SearchTrains({ route, navigation }) {
   const [allStations, setAllStations] = useState([]);
 
   // setTimeout(() => {
-  //   navigation.navigate('SearchResults', {
-  //     searchQuery: { from: 'FOT', to: 'PDN' },
+  //   navigation.navigate('StationSchedule', {
+  //     searchQuery: { from: 'FOT', date: '2022-10-23T00:00:00.000Z' },
   //   });
   // }, 100);
 

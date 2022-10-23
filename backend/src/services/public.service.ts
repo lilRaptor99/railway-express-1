@@ -19,6 +19,13 @@ export async function getStations() {
   return prisma.station.findMany({ include: { adjacentTo: true } });
 }
 
+export async function getStation(stationId: string) {
+  return prisma.station.findFirst({
+    where: { stationId },
+    include: { adjacentTo: true },
+  });
+}
+
 export async function verifyEmail(
   email: string,
   firstName: string,
@@ -281,4 +288,22 @@ export async function reserveSeats(input: ReservationTicketInput) {
   return {
     ...ticket,
   };
+}
+
+export async function searchStationSchedule(from: string, date: Date) {
+  const results = await prisma.trainSchedule.findMany({
+    where: {
+      date,
+      trainTurn: {
+        intermediateStations: { some: { stationId: from } },
+      },
+    },
+    include: {
+      trainTurn: {
+        include: { intermediateStations: { include: { station: true } } },
+      },
+    },
+  });
+
+  return results;
 }
