@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "jsx": "react-native",
+    "suppressExcessPropertyErrors": true
+  },
+  "exclude": ["node_modules"]
+}
