@@ -56,4 +56,15 @@ export async function addComplaint(
   return complaintRes;
 }
 
+export async function getMyTickets(userId: string) {
+  return prisma.ticket.findMany({
+    where: { userId },
+    include: {
+      destinationStation: true,
+      startStation: true,
+      Reservation: true,
+    },
+  });
+}
+
 export function testFunction() {}

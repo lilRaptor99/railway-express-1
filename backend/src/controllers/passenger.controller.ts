@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { User } from '../models/user.model';
-import { addComplaint, updateProfile } from '../services/passenger.service';
+import {
+  addComplaint,
+  getMyTickets,
+  updateProfile,
+} from '../services/passenger.service';
 
 const router = Router();
 
@@ -35,6 +39,20 @@ router.post(
       const complaint = req.body;
       // @ts-ignore
       res.json(await addComplaint(complaint, req.auth));
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  '/my-tickets',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // @ts-ignore
+      const { userId } = req.auth;
+      const tickets = await getMyTickets(userId);
+      res.json({ tickets });
     } catch (error) {
       next(error);
     }

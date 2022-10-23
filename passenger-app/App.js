@@ -33,6 +33,8 @@ import { LogBox } from 'react-native';
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation because it can break windowing and other functionality - use another VirtualizedList-backed container instead.',
   'AsyncStorage has been extracted from react-native core and will be removed in a future release.',
+  'Possible Unhandled Promise Rejection ...',
+  'Request error: , [AxiosError: Request failed with status code 401]',
 ]);
 
 export const Stack = createNativeStackNavigator();
