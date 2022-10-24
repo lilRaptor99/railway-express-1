@@ -17,11 +17,11 @@ export default function SearchTrains({ route, navigation }) {
   const [loginError, setLoginError] = useState(null);
   const [allStations, setAllStations] = useState([]);
 
-  // setTimeout(() => {
-  //   navigation.navigate('StationSchedule', {
-  //     searchQuery: { from: 'FOT', date: '2022-10-23T00:00:00.000Z' },
-  //   });
-  // }, 100);
+  setTimeout(() => {
+    navigation.navigate('SearchResults', {
+      searchQuery: { from: 'FOT', to: 'PDN' },
+    });
+  }, 100);
 
   useEffect(() => {
     request('get', '/public/stations')

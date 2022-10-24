@@ -2,8 +2,13 @@
   "expo": {
     "name": "ticket-checker-app",
     "slug": "ticket-checker-app",
+    "icon": "./assets/images/logo.png",
     "version": "1.0.0",
-    "assetBundlePatterns": ["**/*"]
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.railwayExpress.ticketCheckerApp",
+      "versionCode": 1
+    }
   },
   "name": "ticket-checker-app"
 }

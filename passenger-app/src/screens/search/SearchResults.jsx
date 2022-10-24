@@ -128,35 +128,54 @@ export default function SearchResults({ route, navigation }) {
             (durationInMinutes % 60) +
             'm';
           // console.log('duration', durationString);
-
-          return (
-            <AvailableTrainCard
-              key={train.turnNumber}
-              trainName={train.trainTurn.turnName}
-              start={{
-                station: startStation.station.name,
-                time: startStation.departureTime,
-              }}
-              end={{
-                station: destinationStation.station.name,
-                time: destinationStation.arrivalTime,
-              }}
-              duration={durationString}
-              tag={
-                train.cancelled
-                  ? { status: 'Cancelled', time: '0h 0m' }
-                  : train.delayed
-                  ? { status: 'Delayed', time: train.delayTime }
-                  : // : { status: '', time: '' }
-                    { status: 'ETA', time: '00h 00m' }
-              }
-              handlePress={() => {
-                navigation.navigate('TrainDetails', {
-                  trainSchedule: train,
-                });
-              }}
-            />
-          );
+          if (
+            todaySL.toDateString() !== new Date(train.date).toDateString() ||
+            (todaySL.toDateString() === new Date(train.date).toDateString() &&
+              calculateEta(startStation.departureTime))
+          ) {
+            return (
+              <AvailableTrainCard
+                key={train.turnNumber}
+                trainName={train.trainTurn.turnName}
+                start={{
+                  station: startStation.station.name,
+                  time: moment(startStation.departureTime, ['HH:mm'])
+                    .clone()
+                    .format('hh:mm A'),
+                }}
+                end={{
+                  station: destinationStation.station.name,
+                  time: moment(destinationStation.arrivalTime, ['HH:mm'])
+                    .clone()
+                    .format('hh:mm A'),
+                }}
+                duration={durationString}
+                tag={
+                  train.cancelled
+                    ? { status: 'Cancelled', time: '0h 0m' }
+                    : train.delayed
+                    ? {
+                        status: 'Delayed',
+                        time: moment(train.delayTime, ['HH:mm'])
+                          .clone()
+                          .format('h[h] m[m]'),
+                      }
+                    : todaySL.toDateString() ===
+                      new Date(train.date).toDateString()
+                    ? {
+                        status: 'ETA',
+                        time: calculateEta(startStation.departureTime),
+                      }
+                    : { status: '', time: '' }
+                }
+                handlePress={() => {
+                  navigation.navigate('TrainDetails', {
+                    trainSchedule: train,
+                  });
+                }}
+              />
+            );
+          } else return null;
         })}
       </KeyboardAvoidingView>
       {!isLoading && searchResults.length === 0 && (
@@ -170,4 +189,14 @@ export default function SearchResults({ route, navigation }) {
       )}
     </ScrollView>
   );
+}
+
+function calculateEta(startTime) {
+  const startMoment = moment(startTime, ['HH:mm']).clone();
+  const nowMoment = moment().clone();
+  const diff = startMoment.diff(nowMoment);
+  if (diff <= 0) return undefined;
+  return `${moment.duration(diff).hours()}h ${moment
+    .duration(diff)
+    .minutes()}m`;
 }

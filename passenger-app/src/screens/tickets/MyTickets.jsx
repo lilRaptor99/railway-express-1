@@ -18,7 +18,11 @@ export default function MyTickets({ navigation }) {
 
   async function getIssuedTicket() {
     const res = await request('GET', '/passenger/my-tickets');
-    setPurchasedTickets(res.data.tickets);
+    const tickets = res.data.tickets;
+    tickets.sort((ticket1, ticket2) =>
+      ticket1.createdAt < ticket2.createdAt ? 1 : -1
+    );
+    setPurchasedTickets(tickets);
   }
 
   function isExpired(date) {
