@@ -19,7 +19,7 @@ export default async function request(method = 'get', endpoint, data) {
       data,
     });
   } catch (e) {
-    console.error('Request error: ', e);
+    // console.error('Request error: ', e);
     throw e;
   }
 }

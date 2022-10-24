@@ -56,7 +56,7 @@ const defaultUsers: User[] = [
     phoneNumber: '+94-0777483404',
     nic: '893378644V',
     address: '200/4D, Some Lane, Some Road, COlombo.',
-    stationId: null,
+    stationId: 'MDA',
     role: 'TICKET_CHECKER',
     initialLogIn: false,
     status: 'ACTIVE',
@@ -300,7 +300,13 @@ const defaultStationConnections = [
   },
   {
     stationId: 'PGW',
-    adjacentStations: { connect: [{ stationId: 'KLN' }, { stationId: 'MHO' }] },
+    adjacentStations: {
+      connect: [
+        { stationId: 'KLN' },
+        { stationId: 'MHO' },
+        { stationId: 'PDN' },
+      ],
+    },
   },
   {
     stationId: 'MHO',
