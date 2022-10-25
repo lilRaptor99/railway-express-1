@@ -121,7 +121,7 @@ export default function ReserveSeats() {
       primaryPassengerName: undefined,
       primaryPassengerNIC: undefined,
       userId: userId,
-      return: false,
+      returnStatus: false,
       price: parseInt(values.totalPrice),
       ticketClass: ticketClass,
       ticketStatus: 'UNUSED',

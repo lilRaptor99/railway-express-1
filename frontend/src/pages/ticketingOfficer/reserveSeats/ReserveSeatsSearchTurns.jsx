@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '../../../components/Button';
 import TextField from '../../../components/TextField';
 import { Formik } from 'formik';
-// import * as Yup from 'yup';
+import * as Yup from 'yup';
 import request from 'utils/request';
 import { Autocomplete, TextField as MuiTextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -32,12 +32,15 @@ export default function ReserveSeatsSearchTurns() {
     })();
   }, []);
 
-  // const turnValidationSchema = Yup.object().shape({
-  // start: Yup.string().required('Start station is required'),
-  // destination: Yup.string().required('Destination is required'),
-  // date: Yup.date().required('Date is required'),
-  //   noOfSeats: Yup.number().required('Number of seats is required'),
-  // });
+  const turnValidationSchema = Yup.object().shape({
+    noOfSeats: Yup.number()
+      .required('Required!')
+      .test(
+        'Is positive?',
+        'The number must be between 1 and 10',
+        (value) => value > 0 && value < 11
+      ),
+  });
 
   async function handleSubmit(values, { setSubmitting, resetForm }) {
     console.log('running');
@@ -67,7 +70,7 @@ export default function ReserveSeatsSearchTurns() {
     <TicketingOfficerLayout>
       <h1 className="mt-0">Reserve Seats</h1>
       <Formik
-        // validationSchema={turnValidationSchema}
+        validationSchema={turnValidationSchema}
         initialValues={{
           start: null,
           destination: null,

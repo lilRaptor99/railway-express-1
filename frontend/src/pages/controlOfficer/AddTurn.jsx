@@ -55,9 +55,10 @@ export default function AddTurn() {
     turnNumber: Yup.number()
       .min(3, ({ min }) => `Turn number must be at least ${min} characters`)
       .required('Turn number is required'),
-    turnName: Yup.string()
-      .min(3, ({ min }) => `Turn name must be at least ${min} characters`)
-      .required('Turn name is required'),
+    turnName: Yup.string().min(
+      3,
+      ({ min }) => `Turn name must be at least ${min} characters`
+    ),
   });
 
   async function handleSubmit(values, { setSubmitting, resetForm }) {

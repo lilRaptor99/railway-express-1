@@ -19,35 +19,34 @@ export default function ReservableTurnDetails() {
   const setScheduleData = useLocalStorage('scheduleData', null)[1];
 
   useEffect(() => {
-    (async () => {
-      // console.log('schedule: ', schedule);
-      const start = schedule.from.stationId;
-      const destination = schedule.to.stationId;
-      const date = new Date(schedule.date);
-      date.setHours(date.getHours() + 5);
-      date.setMinutes(date.getMinutes() + 30);
+    (async () => fetchData())();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      setIsLoading(true);
-      try {
-        const res = await request('post', `/public/search-schedule`, {
-          from: start,
-          to: destination,
-          date: date.toString(),
-        });
-        setTurnDetails(res.data.results);
-        setScheduleData(res.data.results);
-        // console.log('scheduleData ');
-        setIsLoading(false);
-      } catch (e) {
-        console.error('Get train turns error:', e);
-      }
-    })();
-  }, [
-    schedule.date,
-    schedule.from.stationId,
-    schedule.to.stationId,
-    setScheduleData,
-  ]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  async function fetchData() {
+    // console.log('schedule: ', schedule);
+    const start = schedule.from.stationId;
+    const destination = schedule.to.stationId;
+    const date = new Date(schedule.date);
+    date.setHours(date.getHours() + 5);
+    date.setMinutes(date.getMinutes() + 30);
+
+    setIsLoading(true);
+    try {
+      const res = await request('post', `/public/search-schedule`, {
+        from: start,
+        to: destination,
+        date: date.toString(),
+      });
+      setTurnDetails(res.data.results);
+      setScheduleData(res.data.results);
+      // console.log('scheduleData ');
+      setIsLoading(false);
+    } catch (e) {
+      console.error('Get train turns error:', e);
+    }
+  }
 
   function detailTable() {
     return (

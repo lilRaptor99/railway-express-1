@@ -2,15 +2,22 @@ import TicketingOfficerLayout from '../../../layout/TicketingOfficerLayout';
 import React from 'react';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import { useParams } from 'react-router-dom';
-// import QRCode from 'react-qr-code';
-import { Table, TableCell, TableRow } from '@mui/material';
-// import PrintIcon from '@mui/icons-material/Print';
+import QRCode from 'react-qr-code';
+import { IconButton, Table, TableCell, TableRow } from '@mui/material';
+import PrintIcon from '@mui/icons-material/Print';
 
 export default function ReserveTicket() {
   const schedule = useLocalStorage('schedule', null)[0];
   const ticketData = useLocalStorage('ticketData', null)[0];
   const scheduleData = useLocalStorage('scheduleData', null)[0];
   const trainTurnNumber = useParams().turnNumber;
+
+  const seatNumber1 = Math.floor(Math.random() * 10);
+
+  const seartArr = [];
+  for (let i = 0; i < schedule?.noOfSeats; i++) {
+    seartArr.push(seatNumber1 + i);
+  }
 
   return (
     <TicketingOfficerLayout>
@@ -122,6 +129,14 @@ export default function ReserveTicket() {
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium border-b-0">
+                    Price
+                  </TableCell>
+                  <TableCell className="border-b-0">
+                    Rs.{ticketData.price}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell className="font-medium border-b-0">
                     No of seats
                   </TableCell>
                   <TableCell className="border-b-0">
@@ -133,22 +148,24 @@ export default function ReserveTicket() {
                     Seat Numbers
                   </TableCell>
                   <TableCell className="border-b-0">
-                    <span className="bg-slate-900 text-slate-100 rounded-2xl mr-2 py-2 px-5">
-                      A - 1
-                    </span>
-                    <span className="bg-slate-900 text-slate-100 rounded-2xl mr-2 py-2 px-5">
-                      A - 2
-                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {' '}
+                      {seartArr.map((seatNo) => (
+                        <div className="bg-slate-900 text-slate-100 rounded-2xl py-2 px-5">
+                          A - {seatNo}
+                        </div>
+                      ))}
+                    </div>
                   </TableCell>
                 </TableRow>
               </Table>
             </div>
           </div>
           <div className="bg-slate-50 rounded-3xl drop-shadow-2xl flex flex-col items-center justify-center w-2/4">
-            {/* <div className="m-6">
-              <QRCode value={ticketId} />
-            </div> */}
-            {/* <Button className="mb-3">{<PrintIcon />}</Button> */}
+            <div className="m-6">
+              <QRCode value={ticketData.userId} />
+            </div>
+            <IconButton className="mb-3">{<PrintIcon />}</IconButton>
           </div>
         </div>
       </div>
