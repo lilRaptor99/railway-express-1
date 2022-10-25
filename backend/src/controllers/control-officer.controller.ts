@@ -6,11 +6,12 @@ import {
   deleteTrainTurn,
   getFeedbackById,
   getComplaintsAndSuggestions,
+  getLocationByTurnNumber,
 } from '../services/control-officer.service';
 
 const router = Router();
 
-/**
+/** p
  * Add train turns
  */
 router.post(
@@ -86,6 +87,20 @@ router.get(
     try {
       const feedback = await getFeedbackById(req.params.id);
       res.json(feedback);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Get locations by turn number
+router.get(
+  '/location/:turnNumber',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const trainTurnNumber = parseInt(req.params.turnNumber, 10);
+      const station = await getLocationByTurnNumber(trainTurnNumber);
+      res.json(station);
     } catch (error) {
       next(error);
     }
