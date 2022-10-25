@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "@types/leaflet": "^1.9.0",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
     "eslint": "^7.32.0",
@@ -24,5 +25,12 @@
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@mui/x-date-pickers": "^5.0.5",
+    "leaflet": "^1.9.2",
+    "moment": "^2.29.4",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-leaflet": "^4.1.0"
+  }
 }
