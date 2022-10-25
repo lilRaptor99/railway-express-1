@@ -97,6 +97,7 @@ model TrainTurn {
   turnNumber           Int                   @id
   turnName             String
   reservable           Boolean
+  location             String                @default("6.933957704555925, 79.84995215472523")
   availability         TrainTurnAvailability @default(DAILY)
   type                 TrainTurnType         @default(SLOW)
   intermediateStations IntermediateStation[]

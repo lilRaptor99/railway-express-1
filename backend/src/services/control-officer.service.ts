@@ -74,4 +74,10 @@ export async function getFeedbackById(id: string) {
   return feedback;
 }
 
+export async function getLocationByTurnNumber(turnNumber: number) {
+  return prisma.trainTurn.findUnique({
+    where: { turnNumber },
+  });
+}
+
 export function testFunction() {}
