@@ -175,15 +175,6 @@ export default function MyProfile({ navigation }) {
                   errorText={touched.email ? errors.email : null}
                   disabled
                 />
-                <Button
-                  mode="contained"
-                  className="mt-4"
-                  onPress={handleSubmit}
-                  disabled={!isValid || isSubmitting}
-                  loading={isSubmitting}
-                >
-                  Update
-                </Button>
               </>
             )}
           </Formik>

@@ -37,34 +37,38 @@ export default function BuyTickets({ navigation }) {
   useEffect(() => {
     const updatePriceInterval = setInterval(() => {
       (async () => {
-        if (
-          fromStation !== previousSelectedStations[0] ||
-          toStation !== previousSelectedStations[1]
-        ) {
-          previousSelectedStations = [fromStation, toStation];
-          const from = stationData.filter(
-            (stationObj) => stationObj.name === fromStation
-          )[0].stationId;
-          const to = stationData.filter(
-            (stationObj) => stationObj.name === toStation
-          )[0].stationId;
+        try {
+          if (
+            fromStation !== previousSelectedStations[0] ||
+            toStation !== previousSelectedStations[1]
+          ) {
+            previousSelectedStations = [fromStation, toStation];
+            const from = stationData.filter(
+              (stationObj) => stationObj.name === fromStation
+            )[0].stationId;
+            const to = stationData.filter(
+              (stationObj) => stationObj.name === toStation
+            )[0].stationId;
 
-          try {
-            const res = await request(
-              'post',
-              `/public/ticket-prices/NORMAL/${formikRef.current.values.ticketClass}`,
-              { from, to }
-            );
-            unitPrice = Number.parseFloat(res.data.price);
-          } catch (e) {
-            console.log('Request Error: ', e);
+            try {
+              const res = await request(
+                'post',
+                `/public/ticket-prices/NORMAL/${formikRef.current.values.ticketClass}`,
+                { from, to }
+              );
+              unitPrice = Number.parseFloat(res.data.price);
+            } catch (e) {
+              console.log('Request Error: ', e);
+            }
           }
-        }
-        if (formikRef?.current?.values) {
-          totalPrice = formikRef.current?.values.return
-            ? unitPrice * parseInt(formikRef.current?.values.noOfTickets) * 2
-            : unitPrice * parseInt(formikRef.current?.values.noOfTickets);
-          setPrice(totalPrice);
+          if (formikRef?.current?.values) {
+            totalPrice = formikRef.current?.values.return
+              ? unitPrice * parseInt(formikRef.current?.values.noOfTickets) * 2
+              : unitPrice * parseInt(formikRef.current?.values.noOfTickets);
+            setPrice(totalPrice);
+          }
+        } catch (e) {
+          console.log('error! in train search filter');
         }
       })();
     }, 500);
@@ -83,11 +87,11 @@ export default function BuyTickets({ navigation }) {
 
     setLoginError(null);
 
-    const from = stationData.filter(
-      (stationObj) => stationObj.name === fromStation
+    const from = stationData?.filter(
+      (stationObj) => stationObj?.name === fromStation
     )[0].stationId;
-    const to = stationData.filter(
-      (stationObj) => stationObj.name === toStation
+    const to = stationData?.filter(
+      (stationObj) => stationObj?.name === toStation
     )[0].stationId;
 
     const ticketData = {
@@ -97,7 +101,7 @@ export default function BuyTickets({ navigation }) {
       email: values.email,
       phoneNumber: values.phoneNumber,
       quantity: Number.parseInt(values.noOfTickets),
-      return: values.return,
+      returnStatus: values.return,
     };
     // console.log('Ticket Data: ', ticketData);
 
@@ -125,7 +129,14 @@ export default function BuyTickets({ navigation }) {
               innerRef={formikRef}
               validationSchema={yup.object().shape({
                 email: yup.string().email('Please enter valid email'),
-                noOfTickets: yup.number().required('Required!'),
+                noOfTickets: yup
+                  .number()
+                  .required('Required!')
+                  .test(
+                    'Is positive?',
+                    'The number must be between 1 and 10',
+                    (value) => value > 0 && value < 11
+                  ),
                 phoneNumber: yup
                   .string()
                   .matches(

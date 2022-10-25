@@ -35,6 +35,7 @@ LogBox.ignoreLogs([
   'AsyncStorage has been extracted from react-native core and will be removed in a future release.',
   'Possible Unhandled Promise Rejection ...',
   'Request error: , [AxiosError: Request failed with status code 401]',
+  "[Unhandled promise rejection: TypeError: undefined is not an object (evaluating 'stationData.filter(function (stationObj) {]",
 ]);
 
 export const Stack = createNativeStackNavigator();
