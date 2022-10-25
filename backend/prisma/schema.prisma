@@ -210,12 +210,13 @@ model TrainSchedule {
 }
 
 model ReservedSeats {
-  trainSchedule   TrainSchedule      @relation(fields: [trainScheduleId], references: [trainScheduleId])
-  trainScheduleId String
-  seatNumber      String
-  status          ReservedSeatStatus @default(AVAILABLE)
+  trainSchedule     TrainSchedule      @relation(fields: [trainScheduleId], references: [trainScheduleId])
+  trainScheduleId   String
+  compartmentNumber String
+  seatNumber        Int
+  status            ReservedSeatStatus @default(AVAILABLE)
 
-  @@id([trainScheduleId, seatNumber])
+  @@id([trainScheduleId, compartmentNumber, seatNumber])
 }
 
 enum ReservedSeatStatus {

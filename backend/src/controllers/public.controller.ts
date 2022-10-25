@@ -5,9 +5,11 @@ import {
   getTicketPrice,
   getTrainSchedule,
   issueNormalTicket,
+  reserveSeats,
   resetPasswordUsingKey,
   searchTrainSchedule,
   verifyEmail,
+  getAvailableSeatCount,
 } from '../services/public.service';
 
 const router = Router();
@@ -145,6 +147,39 @@ router.post(
         date
       );
       res.json({ results });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Get available seat count
+ */
+router.post(
+  '/available-seats',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const totalSeats = await getAvailableSeatCount(
+        req.body.turnNumber,
+        req.body.scheduleId
+      );
+      res.json(totalSeats);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Create reservation ticket
+ */
+router.post(
+  '/reservation-ticket',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const reservationTicket = await reserveSeats(req.body);
+      res.json(reservationTicket);
     } catch (error) {
       next(error);
     }

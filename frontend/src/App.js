@@ -20,7 +20,7 @@ import SeasonTickets from 'pages/ticketingOfficer/SeasonTickets';
 import AddAccounts from 'pages/admin/AddAccounts';
 import Tickets from 'pages/admin/Tickets';
 import AddCrewMember from 'pages/admin/AddCrewMemers';
-import ReserveSeats from 'pages/ticketingOfficer/ReserveSeats';
+import ReserveSeatsSearchTurns from 'pages/ticketingOfficer/reserveSeats/ReserveSeatsSearchTurns';
 import UserProfile from 'pages/UserProfile';
 import AllocateCrewMembers from 'pages/controlOfficer/AllocateCrewMembers';
 import SearchTurns from 'pages/controlOfficer/searchTurn/SearchTurns';
@@ -29,6 +29,9 @@ import ComplaintOrSuggestion from 'pages/controlOfficer/complaintsSuggestions/Co
 import ProfileUser from 'pages/admin/manageUsers/ProfileUser';
 import ProfileCrewMember from 'pages/admin/manageUsers/ProfileCrewMember';
 import ComplaintsSuggestions from 'pages/controlOfficer/complaintsSuggestions/ComplaintsSuggestions';
+import ReservableTurnDetails from 'pages/ticketingOfficer/reserveSeats/ReserveSeatsTurnDetails';
+import ReserveSeats from 'pages/ticketingOfficer/reserveSeats/ReserveSeats';
+import ReserveTicket from 'pages/ticketingOfficer/reserveSeats/ReservationTicket';
 
 function App() {
   return (
@@ -109,7 +112,22 @@ function App() {
                 >
                   <Route path="normal" element={<NormalTickets />} />
                   <Route path="season" element={<SeasonTickets />} />
-                  <Route path="reserve" element={<ReserveSeats />} />
+                  <Route path="reserve" element={<ReserveSeatsSearchTurns />} />
+                  <Route path="reserve">
+                    <Route
+                      path="schedule"
+                      element={<ReservableTurnDetails />}
+                    />
+                    <Route path="schedule">
+                      <Route
+                        path="reservation/:turnNumber"
+                        element={<ReserveSeats />}
+                      />
+                      <Route path="reservation/:turnNumber">
+                        <Route path="ticket" element={<ReserveTicket />} />
+                      </Route>
+                    </Route>
+                  </Route>
                 </Route>
               </Routes>
             </AuthProvider>

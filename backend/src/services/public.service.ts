@@ -5,6 +5,7 @@ import prisma from '../../prisma/prisma-client';
 import HttpException from '../models/http-exception.model';
 import { generateVerifyKey } from '../utils/math-utils';
 import sendMail from '../utils/send-mail';
+import { ReservationTicketInput } from '../models/reservation-ticket-input.model';
 
 const fs = require('fs');
 
@@ -184,15 +185,77 @@ export async function searchTrainSchedule(
     },
   });
 
-  const searchResults = results.filter((result) => {
-    const stationArr = result.trainTurn.intermediateStations;
-    let startStationIndex = 0;
-    let destinationStationIndex = 0;
-    stationArr.forEach((station, index) => {
-      if (station.stationId === from) startStationIndex = index;
-      else if (station.stationId === to) destinationStationIndex = index;
-    });
-    return startStationIndex < destinationStationIndex;
+  // const searchResults = results.filter((result) => {
+  //   const stationArr = result.trainTurn.intermediateStations;
+  //   let startStationIndex = 0;
+  //   let destinationStationIndex = 0;
+  //   stationArr.forEach((station, index) => {
+  //     if (station.stationId === from) startStationIndex = index;
+  //     else if (station.stationId === to) destinationStationIndex = index;
+  //   });
+  //   return startStationIndex < destinationStationIndex;
+  // });
+  return results;
+}
+
+export async function getAvailableSeatCount(
+  trainTurnNumber: number,
+  scheduleId: string
+) {
+  const totalSeats = await prisma.trainCompartment.groupBy({
+    by: ['turnNumber', 'class', 'compartmentNumber'],
+    where: { turnNumber: trainTurnNumber },
+    _sum: { seatCount: true },
   });
-  return searchResults;
+
+  const toatlSeats2 = totalSeats.map((seat) => ({
+    class: seat.class, // eslint-disable-next-line no-underscore-dangle
+    total: seat._sum.seatCount,
+    compartmentNumber: seat.compartmentNumber,
+  }));
+  const reservedSeats = await prisma.reservedSeats.groupBy({
+    by: ['trainScheduleId', 'compartmentNumber'],
+    where: { trainScheduleId: { equals: scheduleId } },
+    _count: { seatNumber: true },
+  });
+  // eslint-disable-next-line no-underscore-dangle
+  const reservedSeats2 = reservedSeats.map((seat) => ({
+    reserved: seat._count.seatNumber,
+    compartmentNumber: seat.compartmentNumber,
+  }));
+
+  const availableSeats: any = [];
+
+  toatlSeats2.forEach((seat) => {
+    const reservedCount = reservedSeats2.find(
+      (seat2) => seat2.compartmentNumber === seat.compartmentNumber
+    );
+    if (!seat.total) return;
+    if (!reservedCount?.reserved) {
+      availableSeats.push({
+        compartmentNumber: seat.compartmentNumber,
+        available: seat.total,
+        class: seat.class,
+      });
+    } else {
+      availableSeats.push({
+        compartmentNumber: seat.compartmentNumber,
+        available: seat.total - reservedCount?.reserved,
+        class: seat.class,
+      });
+    }
+  });
+
+  return availableSeats;
+}
+
+export async function reserveSeats(input: ReservationTicketInput) {
+  const dataInput: any = { ...input };
+  dataInput.Reservation = { create: input.Reservation };
+  const ticket = await prisma.ticket.create({
+    data: dataInput,
+  });
+  return {
+    ...ticket,
+  };
 }
