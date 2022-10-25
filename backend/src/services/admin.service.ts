@@ -303,4 +303,91 @@ export async function deleteCrewMember(id: string) {
   });
 }
 
-export function testFunction() {}
+/*
+ Statistics
+*/
+export async function getTicketStats() {
+  const countByType = await prisma.ticket.groupBy({
+    by: ['ticketType'],
+    _count: true,
+  });
+
+  const countByDateRes: any =
+    await prisma.$queryRaw`SELECT date_trunc('day', "createdAt") as "date", count(1)::int FROM public."Ticket"
+    group by 1 order by "date"`;
+
+  const countByDate = countByDateRes
+    ? countByDateRes.map((count: any) => {
+        const obj = {
+          count: count.count,
+          date: new Date(count.date).toISOString().split('T')[0],
+        };
+        return obj;
+      })
+    : null;
+  return { countByType, countByDate };
+}
+
+export async function getUserStats() {
+  const countByType: any = await prisma.user.groupBy({
+    by: ['role'],
+    _count: true,
+    orderBy: { role: 'asc' },
+  });
+
+  const crewMemberCount = await prisma.crewMember.count();
+  countByType.push({ role: 'CREW_MEMBER', _count: crewMemberCount });
+
+  const countByDateRes: any =
+    await prisma.$queryRaw`SELECT date_trunc('day', "createdAt") as "date", count(1)::int FROM public."User"
+    group by 1 order by "date"`;
+
+  const countByDate = countByDateRes
+    ? countByDateRes.map((count: any) => {
+        const obj = {
+          count: count.count,
+          date: new Date(count.date).toISOString().split('T')[0],
+        };
+        return obj;
+      })
+    : null;
+  return { countByType, countByDate };
+}
+
+export async function getIncomeStats() {
+  const countByType = await prisma.ticket.groupBy({
+    by: ['ticketType'],
+    _sum: { price: true },
+  });
+
+  // const countByDateRes: any = null;
+  const countByDateRes: any =
+    await prisma.$queryRaw`SELECT date_trunc('day', "createdAt") as "date", SUM("price") as "price" FROM public."Ticket"
+    group by "date" order by "date"`;
+
+  const countByDate = countByDateRes
+    ? countByDateRes.map((count: any) => {
+        const obj = {
+          price: count.price,
+          date: new Date(count.date).toISOString().split('T')[0],
+        };
+        return obj;
+      })
+    : null;
+
+  const countByMonthRes: any =
+    await prisma.$queryRaw`SELECT date_trunc('month', "createdAt") as "date", SUM("price") as "price" FROM public."Ticket"
+    group by "date" order by "date"`;
+
+  const countByMonth = countByMonthRes
+    ? countByMonthRes.map((count: any) => {
+        const obj = {
+          price: count.price,
+          date: new Date(count.date).toISOString().split('T')[0],
+        };
+        return obj;
+      })
+    : null;
+
+  return { countByType, countByDate, countByMonth };
+}

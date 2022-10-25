@@ -18,6 +18,9 @@ import {
   deleteCrewMember,
   setReasonToBlockUser,
   AddPriceList,
+  getTicketStats,
+  getUserStats,
+  getIncomeStats,
 } from '../services/admin.service';
 
 const router = Router();
@@ -263,6 +266,45 @@ router.put(
     try {
       await deleteCrewMember(req.params.id);
       res.json({ status: 'success' });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/*
+ Statistics
+*/
+router.get(
+  '/stats/ticket',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await getTicketStats();
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  '/stats/user',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await getUserStats();
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  '/stats/income',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await getIncomeStats();
+      res.json(result);
     } catch (error) {
       next(error);
     }
