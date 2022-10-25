@@ -6,6 +6,7 @@ import {
   getTrainSchedule,
   issueNormalTicket,
   reserveSeats,
+  issueSeasonTicket,
   resetPasswordUsingKey,
   searchTrainSchedule,
   verifyEmail,
@@ -111,6 +112,24 @@ router.post(
         ticketData,
         req.body.quantity
       );
+      res.json({ tickets });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+/**
+ * Create season ticket
+ */
+router.post(
+  '/season-ticket',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      // @ts-ignore
+      const userId = req?.auth?.userId;
+      const ticketData = { ...req.body };
+      const tickets = await issueSeasonTicket(userId, ticketData);
       res.json({ tickets });
     } catch (error) {
       next(error);

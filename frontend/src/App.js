@@ -32,6 +32,10 @@ import ComplaintsSuggestions from 'pages/controlOfficer/complaintsSuggestions/Co
 import ReservableTurnDetails from 'pages/ticketingOfficer/reserveSeats/ReserveSeatsTurnDetails';
 import ReserveSeats from 'pages/ticketingOfficer/reserveSeats/ReserveSeats';
 import ReserveTicket from 'pages/ticketingOfficer/reserveSeats/ReservationTicket';
+import Ticket from 'pages/ticketingOfficer/Ticket';
+import PrintNormalTicket from 'pages/ticketingOfficer/PrintNormalTicket';
+import SeasonTicket from 'pages/ticketingOfficer/SeasonTicket';
+import PrintSeasonTicket from 'pages/ticketingOfficer/PrintSeasonTicket';
 
 function App() {
   return (
@@ -128,6 +132,41 @@ function App() {
                       </Route>
                     </Route>
                   </Route>
+
+                  <Route
+                    path="normal-ticket"
+                    element={
+                      <Ticket
+                        startStation={undefined}
+                        destinationStation={undefined}
+                        ticketId={undefined}
+                        createdAt={undefined}
+                        price={undefined}
+                        ticketClass={undefined}
+                        returnStatus={undefined}
+                      />
+                    }
+                  />
+                  <Route path="print-ticket" element={<PrintNormalTicket />} />
+                  <Route
+                    path="season-ticket"
+                    element={
+                      <SeasonTicket
+                        startStation={undefined}
+                        destinationStation={undefined}
+                        ticketId={undefined}
+                        createdAt={undefined}
+                        price={undefined}
+                        ticketClass={undefined}
+                        name={undefined}
+                        validPeriod={undefined}
+                      />
+                    }
+                  />
+                  <Route
+                    path="print-season-ticket"
+                    element={<PrintSeasonTicket />}
+                  />
                 </Route>
               </Routes>
             </AuthProvider>

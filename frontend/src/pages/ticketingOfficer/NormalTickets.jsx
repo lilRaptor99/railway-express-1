@@ -17,6 +17,8 @@ import {
 import request from 'utils/request';
 import { Formik } from 'formik';
 import { Close } from '@mui/icons-material';
+import useLocalStorage from 'hooks/useLocalStorage';
+import { useNavigate } from 'react-router-dom';
 
 export default function NormalTickets() {
   const [stations, setStations] = useState([]);
@@ -26,6 +28,9 @@ export default function NormalTickets() {
   const [issueError, setIssueError] = useState('');
   const [issueSuccess, setIssueSuccess] = useState(false);
   const formikRef = useRef(null);
+  const navigate = useNavigate();
+
+  const setCurrentTicketData = useLocalStorage('currentTicketData', null)[1];
 
   useEffect(() => {
     (async function () {
@@ -93,15 +98,24 @@ export default function NormalTickets() {
 
   async function handleSubmit(values, { setSubmitting, resetForm }) {
     try {
-      console.log(values);
-      console.log('starting station Id', values.start.stationId);
-      await request('post', '/public/issue-normal-ticket', {
-        ...values,
+      console.log('values', values);
+      const data = {
+        price: values.totalPrice,
+        quantity: values.numberOfTickets,
+        ticketClass: values.ticketClass,
         startStationId: values.start.stationId,
-        destStationId: values.end.stationId,
-      });
+        destinationStationId: values.end.stationId,
+        email: '',
+        phoneNumber: '',
+        returnStatus: values.returnStatus,
+      };
+      const res = await request('post', '/public/normal-ticket', data);
+      console.log('printing the response', res);
+
       setIssueSuccess(true);
       resetForm();
+      setCurrentTicketData({ tickets: res.data.tickets });
+      navigate(`/ticketing/print-ticket`);
     } catch (e) {
       if (e?.response?.status === 500) {
         setIssueError('Error issuing ticket');
@@ -153,7 +167,7 @@ export default function NormalTickets() {
             </IconButton>
           }
         >
-          Crew member added successfully.
+          Ticket issued successfully.
         </Alert>
       </Collapse>
       <h1>Normal-Tickets</h1>

@@ -143,11 +143,34 @@ export async function issueNormalTicket(
         userId,
         destinationStationId: inputTicketData.destinationStationId || undefined,
         startStationId: inputTicketData.startStationId || undefined,
+        ticketType: 'NORMAL',
       },
       include: { startStation: true, destinationStation: true },
     });
     tickets.push(ticket);
   }
+  return tickets;
+}
+
+export async function issueSeasonTicket(
+  userId: string | null,
+  inputTicketData: Ticket
+) {
+  const tickets = [];
+  // eslint-disable-next-line no-await-in-loop
+  const ticket = await prisma.ticket.create({
+    data: {
+      ...inputTicketData,
+      price: inputTicketData.price,
+      userId,
+      destinationStationId: inputTicketData.destinationStationId || undefined,
+      startStationId: inputTicketData.startStationId || undefined,
+      ticketType: 'SEASON',
+    },
+    include: { startStation: true, destinationStation: true },
+  });
+  tickets.push(ticket);
+
   return tickets;
 }
 

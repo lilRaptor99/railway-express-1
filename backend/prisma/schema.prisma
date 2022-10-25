@@ -160,7 +160,7 @@ model Ticket {
   userId               String?
   user                 User?                 @relation(fields: [userId], references: [userId])
   createdAt            DateTime              @default(now())
-  return               Boolean               @default(false)
+  returnStatus         Boolean               @default(false)
   price                Float
   ticketClass          TrainReservationClass @default(THIRD_CLASS)
   email                String?
@@ -172,6 +172,8 @@ model Ticket {
   destinationStationId String?
   destinationStation   Station?              @relation("ticketDestinationStation", fields: [destinationStationId], references: [stationId])
   Reservation          Reservation?
+  name                 String?
+  validPeriod          Int?
 }
 
 enum TicketStatus {
