@@ -7,6 +7,9 @@ import {
   getFeedbackById,
   getComplaintsAndSuggestions,
   getLocationByTurnNumber,
+  getCrewMemberDetails,
+  getScheduleDetails,
+  allocateCrewMembers,
 } from '../services/control-officer.service';
 
 const router = Router();
@@ -101,6 +104,46 @@ router.get(
       const trainTurnNumber = parseInt(req.params.turnNumber, 10);
       const station = await getLocationByTurnNumber(trainTurnNumber);
       res.json(station);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get(
+  '/crew-member',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const users = await getCrewMemberDetails();
+      res.json(users);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Get train schedule details
+router.get(
+  '/train-schedule-details',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const trainScheduleDetails = await getScheduleDetails();
+      res.json(trainScheduleDetails);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.put(
+  '/allocate-crew-members/:scheduleId',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const crewMemberInput = await allocateCrewMembers(
+        req.params.scheduleId,
+        req.body
+      );
+      res.json(crewMemberInput);
     } catch (error) {
       next(error);
     }

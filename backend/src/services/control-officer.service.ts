@@ -52,6 +52,15 @@ export async function deleteTrainTurn(trainTurnNumber: number) {
   });
   await prisma.$transaction([deleteStations, deleteCompartments, deleteTurn]);
 }
+export async function getCrewMemberDetails() {
+  const crewMemberList = await prisma.crewMember.findMany({
+    where: {
+      visibility: 'VISIBLE',
+    },
+  });
+
+  return crewMemberList;
+}
 
 export async function getComplaintsAndSuggestions() {
   const feedbackList = await prisma.complaintsAndSuggestions.findMany({
@@ -78,6 +87,43 @@ export async function getLocationByTurnNumber(turnNumber: number) {
   return prisma.trainTurn.findUnique({
     where: { turnNumber },
   });
+}
+
+export async function getScheduleDetails() {
+  const todayUTC = new Date(new Date().toDateString());
+  const todaySL = new Date(todayUTC);
+  todaySL.setHours(todayUTC.getHours() + 5);
+  todaySL.setMinutes(todayUTC.getMinutes() + 30);
+  const getScheduleFromDate = new Date(todaySL);
+  getScheduleFromDate.setDate(todaySL.getDate() - 1);
+  const trainSchedule = await prisma.trainSchedule.findMany({
+    where: { date: { gt: getScheduleFromDate } },
+    include: {
+      trainTurn: true,
+      headGuard: true,
+      underGuard: true,
+      driver: true,
+      driverAssistant: true,
+    },
+  });
+
+  return trainSchedule;
+}
+
+export async function allocateCrewMembers(scheduleId: string, input: any) {
+  // const dataInput: any = { ...input };
+
+  const TrainSchedule = await prisma.trainSchedule.update({
+    where: { trainScheduleId: scheduleId },
+    data: {
+      driverUserId: input.driverUserId,
+      driverAssistantUserId: input.driverAssistantUserId,
+      headGuardUserId: input.headGuardUserId,
+      underGuardUserId: input.underGuardUserId,
+    },
+  });
+
+  return TrainSchedule;
 }
 
 export function testFunction() {}
