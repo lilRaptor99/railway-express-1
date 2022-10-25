@@ -55,7 +55,7 @@ jobs:
             cd backend
             ls -lah
             yarn install
-            yarn prisma:migrate
+            yarn prisma migrate deploy
             yarn prisma:generate
             yarn prisma:seed
             tsc
