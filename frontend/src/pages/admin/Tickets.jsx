@@ -117,7 +117,7 @@ export default function Tickets() {
         <div
           {...getRootProps({
             className:
-              'border-dotted border-slate-400 rounded-xl m-4 col-start-1 col-end-5 flex flex-col items-center',
+              'border-dotted border-slate-400 rounded-xl m-4 col-start-2 col-end-7 flex flex-col items-center',
           })}
         >
           <UploadIcon className="text-slate-700 text-6xl" />
@@ -145,9 +145,6 @@ export default function Tickets() {
               Upload
             </Button>
           </form>
-        </div>
-        <div className="m-4 col-start-5 col-end-8">
-          <h3>Uploaded files</h3>
         </div>
       </div>
     </AdminLayout>

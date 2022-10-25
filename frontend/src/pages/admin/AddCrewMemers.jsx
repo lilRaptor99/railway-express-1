@@ -217,7 +217,7 @@ export default function AddCrewMember() {
                       {...formik.getFieldProps('occupation')}
                     >
                       <MenuItem value="DRIVER">Driver</MenuItem>
-                      <MenuItem value="ASSISTANT_DRIVER">
+                      <MenuItem value="DRIVER_ASSISTANT">
                         Assistant Driver
                       </MenuItem>
                       <MenuItem value="HEAD_GUARD">Head Guard</MenuItem>

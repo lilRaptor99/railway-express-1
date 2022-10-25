@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import request from 'utils/request';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -86,12 +87,22 @@ export default function SeasonTickets() {
     validPeriod,
   ]);
 
+  const issueValidationSchema = Yup.object().shape({
+    validPeriod: Yup.number()
+      .required('Required!')
+      .test(
+        'Is positive?',
+        'The number must be 1, 3or 10',
+        (value) => value === 1 || value === 3 || value === 6
+      ),
+  });
+
   async function handleSubmit(values, { setSubmitting, resetForm }) {
     try {
       console.log('values', values);
       const data = {
         price: values.price,
-        validPeriod: values.validPeriod,
+        validPeriod: parseInt(values.validPeriod, 10),
         ticketClass: values.ticketClass,
         startStationId: values.start.stationId,
         destinationStationId: values.end.stationId,
@@ -159,12 +170,13 @@ export default function SeasonTickets() {
       </Collapse>
       <h1>Season-Tickets</h1>
       <Formik
+        validationSchema={issueValidationSchema}
         innerRef={formikRef}
         initialValues={{
           start: null,
           end: null,
           ticketClass: 'SECOND_CLASS',
-          validPeriod: 1,
+          validPeriod: '1',
           name: null,
           price: 0,
         }}
@@ -255,13 +267,18 @@ export default function SeasonTickets() {
 
                 <p className="col-start-1 col-end-3 pl-14">Valid period</p>
                 <TextField
+                  {...formik.getFieldProps('validPeriod')}
+                  error={Boolean(
+                    formik.touched.validPeriod && formik.errors.validPeriod
+                  )}
+                  helperText={formik.errors.validPeriod}
                   className="col-start-3 col-end-6"
                   fullWidth
-                  id="validperiod"
-                  name="validperiod"
+                  id="validPeriod"
+                  name="validPeriod"
                   onChange={(event) => {
                     formik.setFieldValue(
-                      'validperiod',
+                      'validPeriod',
                       event.currentTarget.value
                     );
                     setValidPeriod(event.currentTarget.value);

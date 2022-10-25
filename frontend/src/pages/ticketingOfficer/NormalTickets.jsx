@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import request from 'utils/request';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { Close } from '@mui/icons-material';
 import useLocalStorage from 'hooks/useLocalStorage';
 import { useNavigate } from 'react-router-dom';
@@ -96,6 +97,16 @@ export default function NormalTickets() {
     returnStatus,
   ]);
 
+  const issueValidationSchema = Yup.object().shape({
+    numberOfTickets: Yup.number()
+      .required('Required!')
+      .test(
+        'Is positive?',
+        'The number must be between 1 and 10',
+        (value) => value > 0 && value < 11
+      ),
+  });
+
   async function handleSubmit(values, { setSubmitting, resetForm }) {
     try {
       console.log('values', values);
@@ -172,6 +183,7 @@ export default function NormalTickets() {
       </Collapse>
       <h1>Normal-Tickets</h1>
       <Formik
+        validationSchema={issueValidationSchema}
         innerRef={formikRef}
         initialValues={{
           start: null,
@@ -269,6 +281,12 @@ export default function NormalTickets() {
 
                 <p className="col-start-1 col-end-3 pl-14">Number Of Tickets</p>
                 <TextField
+                  {...formik.getFieldProps('numberOfTickets')}
+                  error={Boolean(
+                    formik.touched.numberOfTickets &&
+                      formik.errors.numberOfTickets
+                  )}
+                  helperText={formik.errors.numberOfTickets}
                   className="col-start-3 col-end-6"
                   fullWidth
                   id="numOftickets"

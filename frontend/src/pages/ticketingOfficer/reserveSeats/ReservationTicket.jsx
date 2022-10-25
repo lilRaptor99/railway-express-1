@@ -3,8 +3,9 @@ import React from 'react';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import { useParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
-import { IconButton, Table, TableCell, TableRow } from '@mui/material';
+import { Button, Table, TableCell, TableRow } from '@mui/material';
 import PrintIcon from '@mui/icons-material/Print';
+import ReactToPrint from 'react-to-print';
 
 export default function ReserveTicket() {
   const schedule = useLocalStorage('schedule', null)[0];
@@ -18,12 +19,24 @@ export default function ReserveTicket() {
   for (let i = 0; i < schedule?.noOfSeats; i++) {
     seartArr.push(seatNumber1 + i);
   }
+  const componentRef = React.useRef(null);
+  const reactToPrintContent = React.useCallback(() => {
+    return componentRef.current;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [componentRef.current]);
+
+  const reactToPrintTrigger = React.useCallback(() => {
+    return <Button className="mb-3">{<PrintIcon />}</Button>;
+  }, []);
 
   return (
     <TicketingOfficerLayout>
       <h1 className="mt-0">Ticket</h1>
       <div className="m-4">
-        <div className="w-full flex flex-col items-center justify-center">
+        <div
+          className="w-full flex flex-col items-center justify-center"
+          ref={componentRef}
+        >
           <div className="w-2/4 bg-slate-50 rounded-3xl drop-shadow-2xl">
             <div className="bg-slate-700 rounded-t-3xl h-14 w-full pt-2">
               <p className="text-slate-200 font-semibold text-xl text-center leading-loose my-0">
@@ -165,8 +178,14 @@ export default function ReserveTicket() {
             <div className="m-6">
               <QRCode value={ticketData.userId} />
             </div>
-            <IconButton className="mb-3">{<PrintIcon />}</IconButton>
           </div>
+        </div>
+        <div className="flex justify-center mt-4">
+          <ReactToPrint
+            content={reactToPrintContent}
+            documentTitle="Ticket"
+            trigger={reactToPrintTrigger}
+          />
         </div>
       </div>
     </TicketingOfficerLayout>
