@@ -18,6 +18,7 @@ const defaultUsers: User[] = [
     role: 'ADMIN',
     initialLogIn: false,
     status: 'ACTIVE',
+    createdAt: new Date(),
   },
   {
     userId: '13ab1294-bcf3-4faa-b225-288716f6a490',
@@ -32,6 +33,7 @@ const defaultUsers: User[] = [
     role: 'CONTROL_OFFICER',
     initialLogIn: false,
     status: 'ACTIVE',
+    createdAt: new Date(),
   },
   {
     userId: '87815b2d-1eeb-4999-9152-fd0d57b6b0a6',
@@ -46,6 +48,7 @@ const defaultUsers: User[] = [
     role: 'TICKETING_OFFICER',
     initialLogIn: false,
     status: 'ACTIVE',
+    createdAt: new Date(),
   },
   {
     userId: 'ce48ccf8-2190-4b11-9317-d221295104b1',
@@ -60,6 +63,7 @@ const defaultUsers: User[] = [
     role: 'TICKET_CHECKER',
     initialLogIn: false,
     status: 'ACTIVE',
+    createdAt: new Date(),
   },
   {
     userId: 'de81ded4-4dce-44e9-aefa-5bb8fc537501',
@@ -74,6 +78,7 @@ const defaultUsers: User[] = [
     role: 'PASSENGER',
     initialLogIn: false,
     status: 'ACTIVE',
+    createdAt: new Date(),
   },
 ];
 

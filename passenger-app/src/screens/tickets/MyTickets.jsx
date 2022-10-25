@@ -68,7 +68,7 @@ export default function MyTickets({ navigation }) {
                   ? 'Second Class'
                   : 'Third Class'
               }
-              _return={ticket.return}
+              _return={ticket.returnStatus}
               price={ticket.price.toFixed(2)}
             />
           ))}

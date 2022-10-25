@@ -72,7 +72,7 @@ export default function DownloadTicket({ route, navigation }) {
                       ? 'Second Class'
                       : 'Third Class'
                   }
-                  _return={ticket.return}
+                  _return={ticket.returnStatus}
                   price={ticket.price.toFixed(2)}
                 />
               ))}

@@ -55,7 +55,9 @@ jobs:
             cd backend
             ls -lah
             yarn install
+            yarn prisma:migrate
             yarn prisma:generate
+            yarn prisma:seed
             tsc
             cp -r ./media ./dist/
             cp -r ./public ./dist/

@@ -93,7 +93,7 @@ export async function discreditTicket(ticketId: string, userId: string) {
     // eslint-disable-next-line no-nested-ternary
     ticket.ticketStatus === 'USED_ONE_WAY'
       ? 'USED'
-      : ticket.return && ticket.ticketStatus === 'UNUSED'
+      : ticket.returnStatus && ticket.ticketStatus === 'UNUSED'
       ? 'USED_ONE_WAY'
       : 'USED';
   await prisma.ticket.update({
